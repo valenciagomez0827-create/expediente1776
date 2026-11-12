@@ -334,7 +334,7 @@ let OP = null, unsub = null;
 
 async function detectAudios(){
   for (const k of Object.keys(AUDIOS)){
-    try { const r = await fetch('audio/' + k + '.mp3', {method:'HEAD'}); if (r.ok) AUDIOS[k] = 'audio/' + k + '.mp3'; } catch(e) {}
+    try { const r = await fetch('audio/m1-' + k + '.mp3', {method:'HEAD'}); if (r.ok) AUDIOS[k] = 'audio/m1-' + k + '.mp3'; } catch(e) {}
   }
   render();
 }
