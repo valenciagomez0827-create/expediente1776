@@ -148,6 +148,11 @@ h2{font:800 34px/1 var(--display);font-variation-settings:"wdth" 78;text-transfo
 :focus-visible{outline:3px solid var(--black);outline-offset:3px}
 @media (max-width:760px){.t-grid{grid-template-columns:1fr}.pyr{width:48%;justify-self:end;order:-1;margin-bottom:-6px}.fuse{margin-bottom:-14px}.ticket{transform:none}}
 @media (prefers-reduced-motion:reduce){#spark path{animation:none}}
+.p-body{fill:var(--pyr,#141010)}.p-side{fill:var(--pyr-side,#2a1d18)}.p-lines{stroke:var(--pyr-line,#e4572e);opacity:var(--pyr-line-o,.55)}.p-tri{fill:var(--tri,#e4572e)}.p-eye{fill:var(--eye,#f7efe2)}.p-pupil{fill:var(--pupil,#141010)}.p-base{fill:var(--pyr,#141010)}
+.p-roman{fill:var(--roman,transparent);font:700 15px var(--display);letter-spacing:.4em}
+.f-cord{stroke:var(--cord,#141010)}.f-burnt{stroke:var(--cord,#141010)}
+.credit,.titles h1,.w1,.hook,.coords,.foot{color:var(--fg,var(--black))}.w2{color:var(--num,var(--paper-w))}.w2 i:nth-child(3){color:var(--num-alt,var(--black))}
+.foot .btn-sm{color:var(--fg,var(--black));border-color:var(--fg,var(--black))}
 </style>
 <style>body{margin:0}</style></head><body><div class="bar"><div class="wrap">
   <div class="brand">Directorio · <b>Terminal segura</b></div>
@@ -168,18 +173,18 @@ h2{font:800 34px/1 var(--display);font-variation-settings:"wdth" 78;text-transfo
       <p class="coords">Misión 1 de 5 · París · 48.8606° N, 2.3376° E</p>
     </div>
     <svg class="pyr" viewBox="0 0 400 380" role="img" aria-label="La pirámide del Louvre con un ojo en la cúspide">
-      <polygon points="200,18 392,352 8,356" fill="#141010"/>
-      <polygon points="200,18 214,40 382,346 392,352" fill="#2a1d18"/>
-      <g stroke="#e4572e" stroke-width="3" opacity=".55"><line x1="104" y1="187" x2="300" y2="187"/><line x1="56" y1="270" x2="346" y2="270"/><line x1="200" y1="18" x2="200" y2="354"/><line x1="152" y1="104" x2="250" y2="268"/><line x1="248" y1="104" x2="150" y2="268"/></g>
-      <polygon points="200,54 238,118 162,118" fill="#e4572e"/>
-      <path d="M170 104 Q200 78 230 104 Q200 126 170 104Z" fill="#f7efe2"/>
-      <circle cx="200" cy="103" r="10" fill="#141010"/>
-      <polygon points="0,358 400,350 400,380 0,380" fill="#141010"/>
+      <polygon class="p-body" points="200,18 392,352 8,356"/>
+      <polygon class="p-side" points="200,18 214,40 382,346 392,352"/>
+      <g class="p-lines" stroke-width="3"><line x1="104" y1="187" x2="300" y2="187"/><line x1="56" y1="270" x2="346" y2="270"/><line x1="200" y1="18" x2="200" y2="354"/><line x1="152" y1="104" x2="250" y2="268"/><line x1="248" y1="104" x2="150" y2="268"/></g>
+      <polygon class="p-tri" points="200,54 238,118 162,118"/>
+      <path d="M170 104 Q200 78 230 104 Q200 126 170 104Z" class="p-eye"/>
+      <circle class="p-pupil" cx="200" cy="103" r="10"/>
+      <polygon class="p-base" points="0,358 400,350 400,380 0,380"/><text class="p-roman" x="200" y="373" text-anchor="middle">MDCCLXXVI</text>
     </svg>
   </div>
   <svg class="fuse" viewBox="0 0 1000 150" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-    <path id="fusePath" d="M40 140 C 40 80, 120 60, 240 70 S 420 120, 540 80 S 760 20, 860 60 S 980 110, 960 30" fill="none" stroke="#141010" stroke-width="7" stroke-linecap="round" stroke-dasharray="1 0"/>
-    <path id="fuseBurnt" d="M40 140 C 40 80, 120 60, 240 70 S 420 120, 540 80 S 760 20, 860 60 S 980 110, 960 30" fill="none" stroke="#141010" stroke-width="2" stroke-dasharray="2 10" opacity=".35"/>
+    <path id="fusePath" d="M40 140 C 40 80, 120 60, 240 70 S 420 120, 540 80 S 760 20, 860 60 S 980 110, 960 30" fill="none" class="f-cord" stroke-width="7" stroke-linecap="round" stroke-dasharray="1 0"/>
+    <path id="fuseBurnt" d="M40 140 C 40 80, 120 60, 240 70 S 420 120, 540 80 S 760 20, 860 60 S 980 110, 960 30" fill="none" class="f-burnt" stroke-width="2" stroke-dasharray="2 10" opacity=".35"/>
     <g id="spark"><circle r="16" fill="#ffd166" opacity=".35"/><circle r="8" fill="#fff4cf"/><path d="M0 -20 L3 -6 L18 -10 L6 0 L18 12 L2 6 L-4 20 L-5 5 L-19 9 L-7 -1 L-17 -13 L-3 -6Z" fill="#ffd166"/></g>
   </svg>
   <div class="ticket" id="ticket">
