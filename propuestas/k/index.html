@@ -1,0 +1,496 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Expediente 1776</title>
+<meta name="theme-color" content="#0c0a12">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,300..900&family=Covered+By+Your+Grace&family=Schibsted+Grotesk:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Propuesta 9 · Tinta invisible. Mundo: una hoja en la oscuridad y una linterna ultravioleta. Lo importante está escrito donde no se ve. */
+:root{
+  --night:#0c0a12; --night-2:#14111d; --night-3:#1d1829; --rule:#2c2540;
+  --text:#ebe7f3; --text-2:#b9b2c9; --muted:#8a829c;
+  --uv:#c3ff5c; --uv-2:#7dffd4; --violet:#8b5cff; --danger:#ff6b81;
+  --display:"Anybody", "Arial Narrow", sans-serif;
+  --body:"Schibsted Grotesk", system-ui, sans-serif;
+  --hand:"Covered By Your Grace", "Comic Sans MS", cursive;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--night);scrollbar-color:var(--rule) var(--night)}
+body{margin:0;background:var(--night);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+::selection{background:var(--uv);color:var(--night)}
+input{caret-color:var(--uv)}
+::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:var(--night)}::-webkit-scrollbar-thumb{background:var(--rule);border-radius:10px}
+:focus-visible{outline:2px solid var(--uv);outline-offset:3px}
+[hidden]{display:none!important}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---------- barra ---------- */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--night)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:rgba(12,10,18,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+.bar .wrap{max-width:1180px;display:flex;align-items:center;justify-content:space-between;gap:10px 24px;padding-block:10px;flex-wrap:wrap}
+.brand{font:700 14px/1 var(--display);font-stretch:80%;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.brand b{color:var(--text);font-weight:700}
+.stats{display:flex;align-items:center;gap:20px}
+.tm{display:flex;flex-direction:column;gap:3px}
+.tm span,.meter span{font:700 11px/1 var(--display);font-stretch:80%;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.clock{font:600 24px/1 var(--display);font-stretch:70%;font-variant-numeric:tabular-nums;color:var(--text);letter-spacing:.02em}
+.clock.low{color:var(--danger)}
+.meter{display:flex;flex-direction:column;gap:6px;min-width:120px}
+.meter span em{font-style:normal;color:var(--text)}
+.meter i{display:block;height:3px;background:var(--night-3);border-radius:3px;overflow:hidden}
+.meter i b{display:block;height:100%;background:var(--violet);transition:width .5s cubic-bezier(.16,1,.3,1)}
+.meter.hot i b{background:var(--danger)}
+
+/* ---------- botones ---------- */
+.btn-sm{font:700 13px/1 var(--display);font-stretch:85%;letter-spacing:.1em;text-transform:uppercase;background:transparent;color:var(--text-2);border:1px solid var(--rule);padding:10px 14px;border-radius:999px;cursor:pointer;transition:color .15s,border-color .15s}
+.btn-sm:hover{color:var(--text);border-color:var(--violet)}
+.btn-sm:disabled{opacity:.4;cursor:not-allowed}
+.primary{font:800 22px/1 var(--display);font-stretch:75%;letter-spacing:.06em;text-transform:uppercase;background:var(--uv);color:#141a05;border:0;padding:18px 30px;border-radius:999px;cursor:pointer;align-self:flex-start;transition:transform .2s cubic-bezier(.16,1,.3,1),background .15s}
+.primary:hover{transform:translateY(-2px);background:#d2ff80}
+.primary:disabled{background:var(--night-3);color:var(--muted);cursor:wait;transform:none}
+
+/* ---------- portada con luz UV ---------- */
+.hero{position:relative;overflow:hidden;isolation:isolate;min-height:min(90svh,820px);display:grid;align-items:center;border-bottom:1px solid var(--rule);
+  --mx:62%;--my:42%;--r:clamp(150px,21vw,270px);touch-action:pan-y;cursor:crosshair}
+.hero .wrap{max-width:1180px;width:100%;padding-block:56px}
+.lightpool{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(circle var(--r) at var(--mx) var(--my), rgba(139,92,255,.24), rgba(139,92,255,.08) 55%, transparent 72%)}
+.visible{position:relative;z-index:1}
+h1{margin:0;font-family:var(--display);text-transform:uppercase;line-height:.84;letter-spacing:-.01em}
+h1 .w{display:block;font-weight:300;font-stretch:130%;font-size:clamp(34px,6.4vw,78px);letter-spacing:.06em;color:var(--text-2)}
+h1 .n{display:block;font-weight:900;font-stretch:60%;font-size:clamp(150px,30vw,340px);color:var(--text);letter-spacing:-.02em;margin-top:.04em}
+.lede{font:400 clamp(18px,2.2vw,22px)/1.45 var(--body);color:var(--text);max-width:34ch;margin:18px 0 0;text-wrap:balance}
+.coords{margin-top:14px;font:600 14px/1.4 var(--body);color:var(--muted);letter-spacing:.02em}
+.how{margin-top:26px;display:inline-flex;align-items:center;gap:10px;font:600 14px/1.3 var(--body);color:var(--text-2);border:1px solid var(--rule);border-radius:999px;padding:8px 14px 8px 10px;background:rgba(20,17,29,.7)}
+.how i{width:10px;height:10px;border-radius:50%;background:var(--violet);box-shadow:0 0 0 4px rgba(139,92,255,.25)}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(139,92,255,0)}}
+
+.ink{position:absolute;inset:0;z-index:2;pointer-events:none;
+  -webkit-mask-image:radial-gradient(circle var(--r) at var(--mx) var(--my), #000 0 38%, rgba(0,0,0,.55) 58%, transparent 74%);
+          mask-image:radial-gradient(circle var(--r) at var(--mx) var(--my), #000 0 38%, rgba(0,0,0,.55) 58%, transparent 74%)}
+.ink .m{position:absolute;font:400 clamp(24px,2.8vw,36px)/1.05 var(--hand);color:var(--uv);text-shadow:0 0 1px rgba(195,255,92,.9);white-space:nowrap}
+.ink .m.c2{color:var(--uv-2)}
+.ink .m.big{font-size:clamp(34px,4.4vw,58px)}
+.ink svg{position:absolute;overflow:visible}
+.ink svg *{fill:none;stroke:var(--uv);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ink svg.c2 *{stroke:var(--uv-2)}
+.ink .dot{fill:var(--uv);stroke:none}
+
+/* ---------- contenido ---------- */
+main.wrap{padding-block:56px 80px}
+.stack{display:flex;flex-direction:column;gap:28px}
+.card{background:var(--night-2);border:1px solid var(--rule);border-radius:18px;padding:clamp(22px,4.5vw,40px);display:flex;flex-direction:column;gap:16px}
+h2{font:800 clamp(30px,5vw,46px)/.95 var(--display);font-stretch:70%;text-transform:uppercase;letter-spacing:0;margin:0;text-wrap:balance}
+.kicker{font:700 13px/1.2 var(--display);font-stretch:85%;letter-spacing:.12em;text-transform:uppercase;color:var(--violet)}
+.sub{font:600 14px/1.4 var(--body);color:var(--muted)}
+.memo .from{display:grid;grid-template-columns:auto 1fr;gap:2px 16px;font:400 15px/1.6 var(--body);color:var(--text-2);border-bottom:1px solid var(--rule);padding-bottom:14px}
+.memo .from b{font-weight:600;color:var(--muted)}
+.memo p{margin:0 0 1em;max-width:62ch}
+.memo .uvline{font:400 clamp(26px,3.4vw,34px)/1.1 var(--hand);color:var(--uv);margin:4px 0 0;transform:rotate(-1.5deg)}
+.rules{margin:0;padding-left:24px;display:flex;flex-direction:column;gap:12px;max-width:62ch}
+.rules li::marker{font:800 17px var(--display);color:var(--violet)}
+.rules b{color:var(--text);font-weight:600}
+.opbox{margin-top:10px;padding-top:24px;border-top:1px solid var(--rule)}
+
+form.answer{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+form.answer input{flex:1 1 210px;min-width:0;font:700 22px/1.2 var(--display);font-stretch:85%;letter-spacing:.08em;text-transform:uppercase;background:var(--night);color:var(--text);border:1px solid var(--rule);padding:14px 18px;border-radius:999px}
+form.answer input::placeholder{color:#7d7590;text-transform:none;font-weight:500;letter-spacing:.02em}
+form.answer input:focus{outline:none;border-color:var(--uv)}
+form.answer button{font:800 19px/1 var(--display);font-stretch:75%;letter-spacing:.08em;text-transform:uppercase;background:var(--text);color:var(--night);border:0;padding:0 26px;min-height:54px;border-radius:999px;cursor:pointer;transition:background .15s}
+form.answer button:hover{background:var(--uv)}
+.msg{font:500 15px/1.4 var(--body);min-height:1.4em;color:var(--text-2)}
+.msg.bad{color:var(--danger)}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+.obj.locked{background:transparent;border-style:dashed}
+.obj.locked .redact{height:14px;width:62%;border-radius:8px;background:var(--night-3)}
+.obj.done{border-color:rgba(195,255,92,.35)}
+.obj.done .kicker{color:var(--uv)}
+.obj:not(.locked):not(.done){border-color:rgba(139,92,255,.55)}
+.obj p{margin:0}
+.hints{display:flex;flex-direction:column;gap:10px}
+.hint{font:400 24px/1.2 var(--hand);color:var(--uv);padding:12px 16px;background:rgba(195,255,92,.05);border:1px solid rgba(195,255,92,.2);border-radius:12px}
+.hint b{display:block;font:700 12px/1 var(--display);font-stretch:85%;letter-spacing:.12em;color:var(--text-2);margin-bottom:6px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.reward p{margin:0 0 .8em;max-width:62ch}
+.order{font:400 26px/1.2 var(--hand);color:var(--uv)}
+.audio{display:flex;align-items:center;gap:10px;font:400 14px var(--body);color:var(--muted)}
+.audio .btn-sm{color:var(--text);border-color:var(--violet)}
+.alert{border:1px solid var(--danger);color:#ffc1cb;background:rgba(255,107,129,.08);padding:14px 18px;border-radius:12px;font:500 15px/1.45 var(--body)}
+.rank{font:900 180px/.78 var(--display);font-stretch:60%;color:var(--uv)}
+.frag{font:900 52px/1 var(--display);font-stretch:70%;letter-spacing:.24em;color:var(--night);background:var(--uv);padding:10px 22px;border-radius:12px;align-self:flex-start}
+dl.res{display:grid;grid-template-columns:auto 1fr;gap:6px 22px;margin:0;font:400 16px var(--body)}
+dl.res dt{color:var(--muted)} dl.res dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums}
+
+.foot{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);display:flex;gap:12px;flex-wrap:wrap;align-items:center;font:400 14px/1.5 var(--body);color:var(--muted)}
+.paused{position:fixed;inset:0;z-index:20;background:rgba(12,10,18,.95);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;padding:24px;text-align:center}
+.paused h2{font-size:clamp(46px,10vw,90px)}
+.paused .primary{align-self:center}
+
+@media (max-width:640px){
+  .hero{min-height:84svh;--r:150px}
+  .ink .m{font-size:22px}
+  .ink .m.big{font-size:30px}
+  .ink .dk{display:none}
+  .ink .k0{left:0!important;top:30%!important;width:80vw!important;height:40vw!important}
+  .ink .k1{left:16px!important;top:5%!important}
+  .ink .k2{left:16px!important;top:13%!important}
+  .ink .k3{left:16px!important;top:84%!important}
+  .ink .k5{left:16px!important;top:91%!important}
+  .tm{gap:2px}.clock{font-size:20px}.meter{min-width:84px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style></head><body>
+<div class="bar"><div class="wrap">
+  <div class="brand">Directorio · <b>Tinta invisible</b></div>
+  <div class="stats">
+    <div class="tm"><span>Extracción</span><div class="clock" id="clock">2:00:00</div></div>
+    <div class="meter" id="expo"><span>Exposición <em id="expoN">0%</em></span><i><b id="expoBar" style="width:0%"></b></i></div>
+    <button class="btn-sm" id="pauseBtn" hidden>Pausar</button>
+  </div>
+</div></div>
+
+<header class="hero" id="hero">
+  <div class="lightpool" aria-hidden="true"></div>
+  <div class="wrap visible">
+    <h1><span class="w">Expediente</span><span class="n">1776</span></h1>
+    <p class="lede">Un archivista muerto en el Louvre. Una postal escrita en símbolos. Y debajo, en tinta que no se ve, lo que no se atrevió a decir.</p>
+    <div class="coords">Misión 1 de 5 · París · 48.8606° N, 2.3376° E</div>
+    <div class="how" aria-hidden="true"><i></i><span id="howText">Muevan la luz sobre la página</span></div>
+  </div>
+
+  <div class="ink" aria-hidden="true">
+    <!-- círculo alrededor del año -->
+    <svg class="k0" style="left:calc(max(16px,(100% - 1180px)/2 + 16px) - 30px);top:22%;width:min(66vw,620px);height:min(32vw,330px)" viewBox="0 0 620 330"><path d="M40 170 C 30 60, 300 10, 520 50 C 640 80, 620 260, 440 300 C 260 335, 60 300, 46 190 C 44 170, 70 150, 110 140"/></svg>
+    <span class="m big k1" style="left:min(58vw,700px);top:16%">ellos nunca se fueron</span>
+    <span class="m c2 k2" style="left:min(62vw,760px);top:30%">1776 → 1785 → hoy</span>
+    <span class="m k3" style="left:min(64vw,780px);top:58%">miren el reverso de la postal</span>
+    <svg class="c2 dk" style="left:min(57vw,690px);top:62%;width:90px;height:80px" viewBox="0 0 90 80"><path d="M84 6 C 60 20, 30 40, 10 72 M10 72 l 2 -14 M10 72 l 13 -5"/></svg>
+    <span class="m c2 k5" style="left:34%;top:86%">no confíen en el Directorio</span>
+    <span class="m dk" style="left:min(70vw,900px);top:76%">5 fragmentos · 5 ciudades</span>
+    <!-- fila de cifrado de rejilla -->
+    <svg class="dk" style="left:min(60vw,720px);top:43%;width:340px;height:44px" viewBox="0 0 340 44">
+      <path d="M4 4 H36 V36"/><circle class="dot" cx="20" cy="20" r="3"/>
+      <path d="M52 4 V36 H84 V4"/>
+      <path d="M100 36 L116 4 L132 36"/><circle class="dot" cx="116" cy="26" r="3"/>
+      <path d="M148 4 H180 V36 H148"/>
+      <path d="M196 4 V36 H228"/><circle class="dot" cx="210" cy="22" r="3"/>
+      <path d="M244 4 L276 20 L244 36"/>
+      <path d="M292 4 H324 V36 H292 Z"/><circle class="dot" cx="308" cy="20" r="3"/>
+    </svg>
+    <span class="m dk" style="left:4%;top:6%">48°51′38″ N — sala de manuscritos</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="briefing" class="stack">
+    <article class="card memo">
+      <div class="from"><b>De</b><span>Directorio</span><b>Para</b><span>Agentes de campo designados</span><b>Asunto</b><span>Expediente 1776 / Operación París</span></div>
+      <div class="audio" data-audio="briefing"></div>
+      <p>Agentes:</p>
+      <p>Hace 72 horas, Henri Lambert, archivista del Museo del Louvre, fue encontrado sin vida en la sala de manuscritos. Antes de morir dejó una secuencia de símbolos escrita a mano en el reverso de una postal antigua.</p>
+      <p>Lambert llevaba años investigando una teoría que todos tomaban por locura: que los Illuminati de Baviera nunca se disolvieron en 1785, sino que pasaron a la clandestinidad y desde entonces han empujado al mundo hacia sus guerras más grandes. Según sus notas, la siguiente está a semanas de estallar, y la prueba que podría detenerla fue dividida en cinco fragmentos y escondida en varias ciudades.</p>
+      <p>Ustedes dos son los únicos agentes en quienes todavía confiamos. Sigan el rastro de Lambert, recuperen cada fragmento antes que ellos y no confíen en nadie.</p>
+      <p class="uvline">Ni siquiera en nosotros.</p>
+    </article>
+    <article class="card">
+      <h2>Protocolo de la misión</h2>
+      <ol class="rules">
+        <li>El Agente 1 abre el <b>SOBRE A</b> y el Agente 2 abre el <b>SOBRE B</b>. Cada uno puede leer en voz alta y describir lo que tiene, pero los documentos no se intercambian.</li>
+        <li>El <b>SOBRE C</b> permanece sellado hasta que esta terminal lo ordene.</li>
+        <li>Tienen <b>2 horas</b> antes de que se cierre la ventana de extracción. El reloj solo corre con la misión activa; pueden pausarla.</li>
+        <li>Cada respuesta incorrecta suma <b>3 minutos</b> y un 10% de exposición. Cada solicitud de apoyo suma <b>5 minutos</b> y un 5%.</li>
+        <li>Si la ventana se cierra o la exposición llega al 100%, la misión continúa, pero su calificación baja y la siguiente misión empezará con 10 minutos menos.</li>
+      </ol>
+      <div class="opbox stack" style="gap:14px">
+        <div id="opGate" class="stack" hidden style="gap:10px">
+          <h2 style="font-size:32px">Código de operación</h2>
+          <p style="margin:0;max-width:62ch;color:var(--text-2)">Elijan una palabra secreta para su partida y escríbanla igual en los dos dispositivos. Así ambos verán el mismo avance.</p>
+          <form id="opForm" class="answer" autocomplete="off"><input id="opInput" aria-label="Código de operación" placeholder="Palabra secreta" autocapitalize="characters" spellcheck="false"><button type="submit">Conectar</button></form>
+          <div class="msg bad" id="opMsg"></div>
+        </div>
+        <div id="opInfo" class="sub" hidden>OPERACIÓN <b id="opName" style="color:var(--uv)"></b> <button class="btn-sm" id="opChange" type="button">Cambiar</button></div>
+        <button class="primary" id="startBtn" disabled>Conectando…</button>
+      </div>
+    </article>
+  </section>
+<script>
+(function(){
+  const hero = document.getElementById('hero');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (matchMedia('(hover: none)').matches) document.getElementById('howText').textContent = 'Deslicen el dedo sobre la página';
+  let tx = .62, ty = .42, x = tx, y = ty, lastInput = -1e9, t0 = performance.now();
+  function set(px, py){ hero.style.setProperty('--mx', (px*100).toFixed(2)+'%'); hero.style.setProperty('--my', (py*100).toFixed(2)+'%'); }
+  function fromEvent(cx, cy){ const r = hero.getBoundingClientRect(); tx = (cx - r.left)/r.width; ty = (cy - r.top)/r.height; lastInput = performance.now(); }
+  hero.addEventListener('pointermove', e => fromEvent(e.clientX, e.clientY));
+  hero.addEventListener('touchmove', e => { const t = e.touches[0]; if (t) fromEvent(t.clientX, t.clientY); }, {passive:true});
+  hero.addEventListener('touchstart', e => { const t = e.touches[0]; if (t) fromEvent(t.clientX, t.clientY); }, {passive:true});
+  if (reduce){ set(.66,.36); return; }
+  function loop(now){
+    if (now - lastInput > 2500){ // sin interacción: la luz recorre la página sola
+      const s = (now - t0)/1000;
+      tx = .55 + .3*Math.sin(s*.45); ty = .45 + .3*Math.sin(s*.7 + 1.2);
+    }
+    x += (tx - x)*.12; y += (ty - y)*.12; set(x, y);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+  <section id="mission" class="stack" hidden></section>
+  <section id="final" class="stack" hidden></section>
+
+  <div class="foot">
+    <span id="sync">Conectando con el archivo…</span>
+    <button class="btn-sm" id="resetBtn">Reiniciar misión</button>
+    <span id="resetConfirm" hidden>¿Seguro? Se borra todo el avance. <button class="btn-sm" id="resetYes">Sí, reiniciar</button> <button class="btn-sm" id="resetNo">Cancelar</button></span>
+  </div>
+</main>
+
+<div class="paused" id="pausedLayer" hidden>
+  <div class="kicker">Misión en pausa</div>
+  <h2>El reloj está detenido</h2>
+  <button class="primary" id="resumeBtn">Reanudar misión</button>
+</div>
+<script type="module">
+const MISION = [{"id":"postal","title":"La postal de Lambert","kicker":"Objetivo 1 de 4","prompt":"Lambert escribió algo en el reverso de la postal antes de morir. Descifren el mensaje y reporten <b>dónde escondió la prueba</b>.","placeholder":"Lugar exacto","salt":"ISx6tXDoynXlne0oniB0GA==","wraps":[{"iv":"xET5ykopedPvWMWS","ct":"pHYhq2wEqkjGlilTJqd6vOHgzACILAYiksozHWv2fQciwjPq9fAg8bLb4WkyNdmp"},{"iv":"a2wXTfn9nOgJsy3A","ct":"9gDtpO5giA/7TTaFt6z0dR7K+QZbo4S9LfEQxGDuBwk7dxGtzJCM+YBFFPtz8D08"},{"iv":"g6nMNjv3iVchbQVO","ct":"SMZf0LCjJ5AJ2FSgi8T1pwQLY19pu3VukXz5gGO/Tg5CNhB1mX57dptSIC5EGuXj"},{"iv":"A1nSHfAdnGe7UXxT","ct":"6mx1rzqapa4QDBAIavMhM+435mPPzZCfMur3ocl5VFYEzWw/ESyqamEBPma5OyK2"},{"iv":"vrWrEubq9tvXrsHc","ct":"FA3sCMQ2ddoThSv/FtNAyh56vSCzKy2cuAUVxV4K1eYuijxi0sJ6NB+QTNZuCp2k"}],"reward":{"iv":"rMKmdSpR+YmYTiN9","ct":"K4juCcUP6WPy6CGnPJukR1yfy7Q3IQnOR7GO9E3khf86fb7ZRVumvmC0rb5KABKbGIXMzP6eYrjcvfGqn4VYX522O8zGLgB4kdOwbqXorNSNX91D318tQO8aPld/kKE/wPty5OFPR5w3aLkEvm2NlhfAkwq4nhJlmBg8yFtFp0i5m95P4ZfKd+QtguEon3ZVri1mn3BZI6O/uran+w7l26YMmwd6aKH66aJa2ayipVgJBTMklDGD4TALH33S/tbvzgEWnFe9zhDKT7e5wm4oADnwBySA6E3Ein0X3xTBRKYAew31aOgL60onaF09SWPGfopaUysIZgYgjSiqxGqE27k5PqrUM7DAjXwfsUoQFOT7kuTi51dfIWIEs1B4hjxOaHy+dNOtmjDoCm8FLCOYW64K0oNpzBtzEwT/fIOd03Di5LFf4IuDGFUSsfykmIASAmYmZjmoVAaY1hxqg7pzLx4dF8sCOD77sMAwLiFEpsbBAxg0xos2Z/PvnIERc/rC1JP49ETsAyDvddkpp6yqHqUdISQBloLK7CbVWNh7828wLhrxjL9ZiJ0i9VqY7TZdXjirHeCNZS662cZW1c7ZenNbwVySH/hE9WkzV7K/VLRmsw9Qy8ruSnxSXVO+yoUr2yTT1hAOJ16vJ+mp7invKBuIgguqXxL9T8fUSno0PxS3WfTz1dO/rVssKPNLui7dIOSZkeRwZSHdnbxAf/w9xSTZNgQlhpLLTFrz483qAGEClX6FIFForaTxAYafSn2qb/vW2TsB4C4Qj1KqaFFhPCeoq7FBhxyBMVzk5/CCm33H4509Ltk2oV+vjWqhfYc/3u39ySuRoC8LTSki+WIMiJkMyvbmrCo5GEPqtpBgaLnUOlD5bvYDfjKvRe15x0eL6C8="},"hints":[{"iv":"Zl+RtmZq100E3Umh","ct":"nPOw84VrHKko9g+ghjmXoXEXOdK466hFk0DnNFRnjR6qY5E25HHfu1jcEfYJUzRKSiYbe6R7gdKmVDLt7QEc1+h9wEgY+a7m98/33wPFnWvxgGiIQhp0SxHSH6nyNJPOCWm/"},{"iv":"bMTonIHhbUrD/iTu","ct":"fqzjqhXODZ0jMW1FSOSavZDSt08VgcRIZY4f08hllc5E7lSQagoVN7WoZwQYfIrZhmWU0cHQTm3I0ZXR2iy+IvUS2GpanqQQYQcfBkxDjR+qP2SCBqM7mZ85n9nR9/CkwPV00g8zChWebGEOCngds/rDhY24UYLYnEZikHwuOoNH8V3r9DIwWhyolyUF+Q9/O6cRDiKRwvQI/dX7SQ80lNT/NwY5mgBk8xF0Q/aGRd/0L8h933uv3GAl5NQ/GQzVRF1Bve10zMOJ8nrYFS95IwN8qw=="},{"iv":"hWwPeMcHmYmJ2tuz","ct":"E3nkGJUWVz0DdAHqMfBDV52HwglORcPekKCfBJHPx0F1C9iARBoB+VV2iA2ENnUwU9STwmkwCD14TwWCseKZQyiB"}]},{"id":"candado","title":"El candado de las cuatro damas","kicker":"Objetivo 2 de 4","prompt":"<i>«Mis cuatro damas guardan la llave.»</i> Encuentren la <b>combinación de cuatro dígitos</b> del estuche.","placeholder":"0000","salt":"FF2I3JF8VVRD4sbztKrW9w==","wraps":[{"iv":"3oygx6nKGQ3e0KRm","ct":"bIfvq+sWpD0Isg6Ah7m1vrC+I3YJmAzY5jKV7X0dfrmLo+qWQAaMi9Q+kTs5MItz"}],"reward":{"iv":"AvDOgZu2Sr6xLY17","ct":"XMcNDGWWmA4KGoRovQYa+LYpnKrrXsgFrNXncWauh0cmN6DiWHHbOSuBja5mWHWDqS5ugY2JJ3oPmSqZ8WkqPolM2OWAbotwK6dJo7qZ2lvGQpZSZPwnoa0POYebJRLYNT5n0CCTPnKECcswL/4yv61HCAT5DsciYpXqUfZoFt9Ul0eGyIe7hfTpmQ6Du0l4UwixPReHhvMopk5C9ExgVoCyiPq6IBoF+8HHrRRjcW5eK+BQhY8dXSD5GbrA7OHR+oG7wS7U1NVNjd2qeQiZiXcGItmVkdU7XVs18OywRWKUsz5KjoFwT7H9lSwkogxC1X2GwnyGcja2dTSPUX97X9OUf24mj/1bH5qxfqQzgBcRREHSRcJV1Af7InDNP6bwPyxQ2/SjCJc3EtKuxVRcwWp/lxOd4pENeRfcQQ/LZP3h9lo9k0EJ7CjNdRM0wNInoZJyRsMvCFm6YS7ou63Eti7MMtFEEJlgCTXx/oKYVfPJga1S7gwx0Qj0BJMcd6gHe8F8gFqzlo7tSO7s+rXx5ajbC4xHtgj/RSb/ESF6z3s0Eu/3tggnAxkHAaF6oo7+akOIfxYwtJVin/SuVagks9ZYaG7CH4TOge9Vax6RHbuwm1V6IGamyDbV2p4xknT9KbAE+hSYDIC27cPK7NJi1DD1G6hMBh1QAjqz"},"hints":[{"iv":"EJj3Osq2/oiWq8J1","ct":"/AwjNSdiJB6FwaHzcqf8L/nPLddkHwtmQiNDbOThRL2JLIhS47jas/xvKp3fa6YMe2I5Hj4O4RTpRkGedahRucHZzFBij2nRHXRStUqOkYv7/Af5uuJuV3neK3s2AqGteZAqt0dmnE0OuV2ouK9MAe189eRsUGIh7MqwnY/x2y07J0BscU5WlZ9tLW2dJIPxdpPD/wON+c78/wBKug=="},{"iv":"a54csls0kH0Adf6q","ct":"b8i0VH1zqbRg8BlyC75AeBLhaqdDWPauxzBmHl6jcSG2YbLBH02r0Y8DbvDF49r9LDIds/WTYE8Wnc8C7/iU9uVRsEsb5PvwCksBnaJ6k+RR2lnp+wpHTkpDroBvhyxg94fMVHM6nZcv1+85G149pvCJaZNo7ZTtK3tVT2ZuzFkJtLp97XkK1T1XYM8xHIef4mMefOyrFH7KE/Sxcci2g0YSUFvHbD7HVpjPIeWutnPq4o+R9IFng1EB6aEFcWA15vSkhA=="},{"iv":"gJOUPkDFZW0NbHeY","ct":"8XsisqHaIi206wZYdUefoa7gCiSr/bZdWsC0jzQNzBuHCwszkeeKBHmwXzEsnoEbEzfYJPaxakbBWMbSutjUJUvrqNfVygHGse/MSDjyDBstNTquZCTTp3ENiFD/qbyWrbxMkXb8v2Pg8FzMyg=="}]},{"id":"rejilla","title":"La tarjeta perforada","kicker":"Objetivo 3 de 4","prompt":"Usen la tarjeta del estuche para leer el mensaje oculto. Reporten <b>el lugar al que debe dirigirse el equipo</b>.","placeholder":"Lugar","salt":"Z9/VR1+13/9mHVF6R1EgxQ==","wraps":[{"iv":"usRVRuWbKld5Oeci","ct":"hhgMoLLXRC/7vBZtszLQMKB8unukVwf/xt000U9kJOFZ6MhmKptLdbrwMbAePQuc"},{"iv":"Z/2mDcjuHBg5Wod/","ct":"hDLVdPdgB/a52jqW+aLCIwtf0BwwSAYx+z+JkPXU3o5ANzDk7EJ3/1TBOK9ofwb1"},{"iv":"mRRnIfUD/W0MDpgD","ct":"LexPcz0j+u5ZZhfvJSzIhukJzlvjcc7gWilCoE0IAyFlV7Rot6otaI65sk2cHNOd"},{"iv":"ARJP1dEYqNF4+O0x","ct":"mBSrdnBHha1uTppI+lOE9sDwHqjY5Ua6gnpENWZvrJEl00WWD0oGQcOwEMSFM/CU"},{"iv":"XBeTQhP/LjzN6YPA","ct":"Agi3gwkXHrsOl0432xSbYQ2q1EVl7ylicVpOiM+g/iQYaoXnv83dlhd4uKEjugLj"},{"iv":"eEVjo7iy2TEYdAv8","ct":"PGSNDscVQmtrGr0UkR80nbwKmkCzhHg3Yvr2XZDwooFBdsrvavzmU22gAPXCE6Qe"}],"reward":{"iv":"sMK0hJQOF+L112lX","ct":"oZ8Ifkz4cbGLaLW0EoNdVKQpHZSZkoyAmU8o1DZ38/coLr0jpPOIczUnvyFwJozPv6OuaLrl0RNehxMbJIS38HAd+vPBMqdFpoSvBa2THcKYd7QWNyNeFRGBsVmM/QqnMQNHDbRBPzPQ+pKPJhppEzZ6ZPnqNsvnIEkwlTQ9O58GXrB1Mq0uR3HUq7s/dMv47l7lnGeG9fSHvslV4u5BXHit5H7fDrZ2wAhMu/RNU+Vz9CsJllyQaHvfwGuj5DXgFHeLu1UgplANOAB4DsEWQGQCXKu4szTseD3KWc4iBwFC44ge4j1lac5vPreAk4uTZKMD8lRmP154ZKIBHPl82pyT38SnbJrXeSNEOUHySmbDRRGg2RpdEWQOnsk5q2+5ISHRgicZ6YVhr/Pq0y3B9YRRkxqQeg/caK+lsIlvTFehRcYRcB9KopFQsIICFhIsgyX1bO1byEZI8/uATdQqzlcxPAJyEpagTSuIp1Dk4hoi10p5uK8EGi2O1pM9h6gaq82jSGJs8oIeNo+HSu+T21dQgwRB6YswU3hqK+IdVHySozIjYFFUAdmC3iJG3Ru2uwT83b4Yf8aUFonupno1NKm1qQ3AfOGfMalvEdnPw6JYw5i9kAzUJLZgvxZ8PbnQchKX0CaY2yJdXGOqOUf8/xP0+hNt/dKRhn6zcWLAV1qBYXn3hRtyvvNyUHZay26mobeyMoRNykGz61JPp5dyNIDeew=="},"hints":[{"iv":"mChCng+FfiOr5SXj","ct":"MOZxjO8oawATYWkQjWZYs4MDrYHo33INV2KCWXyodwPspmWmdVtwjOpZ5bSAdx6GbXhsXqzYcnuM8xewJ8nduKrC5NAto33To26Bcve8Ni+rbAJ+uCwJYJys3bp1Hw=="},{"iv":"cFEYS4OraSsyj9Sn","ct":"/x35AvNMRkFLwHe7XnghcwwIbg/ruUCX5JW93pOFs8zUHdptAYtFQ+EajdLWx/+bFWxXzgN/8Nxr2HBFwabgqELAmRS9Wo18aIAhMx39baHYs4bJmlGIkLr0V+8NVE3KvpKHsYVNgFaGaGleT0Vx0Pnyx8GBeUWxRwtzk2FhkpSNxXRpZrc4HZTH7LHJfA3pTwzKHfwDM0+6I81FgEObo3tgPPmhlZgoDHMcLwnCgVuXXFdLgouKZCdD9S0u07I+cqMOygs8Av6JQMwiuA+6u10XO0NpTA=="},{"iv":"jm5auBFHrBLv1n7P","ct":"63pcws9L3c96+9R7jnc4Wf8BVDqtvwyWXbxWIJV9O8UetTFyfmRTYvw7KtYSNEMS2ZHUxRGh84HP17YdCX8GPaz1bWyvQvFNOX8mA3aA4wa5V5buTepswoxwKQ=="}]},{"id":"mentira","title":"¿Quién mintió?","kicker":"Objetivo 4 de 4","prompt":"Tres personas estaban vinculadas al museo esa noche. Una de ellas mintió en su declaración. Reporten <b>su apellido</b>.","placeholder":"Apellido","salt":"bwkBsCanXZa0AnZsgqYQnw==","wraps":[{"iv":"9SdjcIJoa1gIw0y3","ct":"ev6RveL8s/k0PhUW5ESPAdvruf3xgSpl0mUOCAMZbBei3PurGPCzXIXALSS5dNCl"},{"iv":"N+KKlYkFtLMkDONI","ct":"MtZeiVv1lS3rSZXgojruQDrziz1L+zcvrgK5r9ezczTE7NpX+HwnO3MI1LmmdDUD"},{"iv":"KrCWLkOqOrYYqGs7","ct":"GOZWWLcW3hkK/yOn5Dm2vTSGz0C2xiXoJ340Z9H5l1O4zlCWqR8DkXAtLBFf+5EZ"},{"iv":"OUKyOc2HBTyhps4k","ct":"Y3DBZZ+/PmqszIE1FhiDG98iXsZASpMfGbhX2wZ08EVmjXIX8+35aAFO/jjskues"},{"iv":"rBvZONVLPbbFxQ+g","ct":"TDyzYStzY4whisR3CkeFnfWOQE1KfkdH4jmgjrs7aSveqf21EbzhqaQ7I/TanQSl"}],"reward":{"iv":"O8YGLXumKZLaqh6J","ct":"ARdwpAFfi5jIDfI7DV3gAXaktfsejyr/dn7rJbZVDkqV//lfvJQXIIPKNTlOOmjHoHdBrdHFV7A5D15uFkckYgwnEjwnKgZ2xBupiOBEUAlk5eg5vf0jFdTnnYTN5a9680sRx6EOtP338Gm6CWcVkjyinoMoY4kY16qDUqtxrQl/vY496UXZab+JoA7WZ3ot8oDJFuNZkPHNRIUbMb/gnLbq0zi/uhVBR/YNxARUdZd5qv4UsK+hCQ6KlNTDUTnDyePgp4Opky87TIEu61ANGGNnOiJHMoezVkRaZZ8Y4VFjMJQMq7bsIKxda3GrNrQ3zu1zGiG4Rx2+CNTItaKa5mdE/reIau7RmY1SRcDZ9k7jL29475W4MKu8ITW57BGQWCNStl4EDxERbgsy++7OICQBTW5TbA+nLqdN5YM+ieP9X0rlCbQu+jm7ZcxoP1N3hDfGb42c7KAQMCCNmEOJBZPYahwN8ABj0ICZWYcOa5fJVyF/i5KLdK8MMzPyj7RovZV+ZGXJRLZQs182WHOQRswqRVBNUDjUsxXjebM2WHtNm04pZUDM6bRsnbtyP5WMfn71DJN21uJEM5gV4pCsTDli9eqM1AfI2Ueb4ZF0I+8FBCRnVdtl7TZ6uPzz9ZMfuW7+ltlOKHAWJ4Gaqvo/gdRi9fciq9uVX/qd1Ag5jhU2h45xVHw7nidjUHa11ydZxJiwB2mE54aW7/jcAaDKujxA/OePFGt1zAa70d3s8XKT4s1ZI2Y3UlafvT16akp+z3XpSIBwcMcG0LxvhAdLcH631R648Fldy5NHw14jGiG8AoKjVA0CtYbMR+h6yySSY84ISEciwbUnZkQVyMJrlomvslzualjuzUGY0vQvHCJbXxQ1GcVN4TRHSoU2Ep9thKr4+SLPM70Wmw+wMbBBMVOk3G8As9ALLSn98DkdHMcHuxQB/dLEbZJd7nEArq9uVgvH0QZU/jH9RvXrMNx9uMkK/yhgv7uJ9Af2i7wq86wptLCaagcnkiPdj2EQMAomnxcxWXR608Bmhtucc7v/iQzn3VUKarFylQ=="},"hints":[{"iv":"nmwXPhgeJvVgaRAZ","ct":"Ge/fNmzCT8107fk/bhv+dFthPhvjfvrB5weOyoSVy+FXuprsUA7i8BFTtnom5qbLErSsRKrPcR8MvwtZZoCkeq5zBi0ioYOEf8Qzyswc52KSD/tJ3ZOlISry5h7WXiWrKtNLmUBLFIXP+0k="},{"iv":"c6JrysSPP4Z52oXh","ct":"6CJh+HETktPJOr2tklU/KBfPd/RT6o64GH8rOCIrU5LeLmEyzqScf5ahFQ16QFfSD9AOehJHRuYnU/Y0Gh3cnL5H2qIsoEr1mWHxYpQOIH5gGc+tBLJ11ajfaXRLbUc="},{"iv":"lyWOrW3SUAH6y/J1","ct":"Wi7hk0QzkDxv9fp3cJXppS3+YqP5RWZwy8x5WKv04ktILJdgLEWR3pwRxRjDRCP4IJDCBbTyKct4/u9BgrWS53+BX90YCtOc89xVz65Ukh7fxBMD9Xuv817zdeAmc5xloG+onqYWYVK6UOT1v8CRFdrxjgha"}]}];
+const LIMIT_MIN = 120, ERR_MIN = 3, HINT_MIN = 5, ERR_EXPO = 10, HINT_EXPO = 5;
+const AUDIOS = { briefing: null, interceptacion: null, cierre: null }; // se rellenan si existen audio/<clave>.mp3
+const TTS = {
+  briefing: "Transmisión cifrada del Directorio. Agentes: hace setenta y dos horas, Henri Lambert, archivista del Museo del Louvre, fue encontrado sin vida en la sala de manuscritos. Antes de morir dejó una secuencia de símbolos en el reverso de una postal antigua. Lambert creía que los Illuminati nunca se disolvieron, y que la próxima gran guerra está a semanas de estallar. Ustedes dos son los únicos en quienes confiamos. No confíen en nadie. Ni siquiera en nosotros. Este mensaje se autodestruirá.",
+  interceptacion: "Interceptación de radio. Frecuencia no identificada. Voz masculina, acento alemán. Repito: el estuche fue abierto. Los agentes del Directorio tienen la tarjeta. Activen al contacto de París. Fin de la transmisión.",
+  cierre: "Buen trabajo, agentes. El primer fragmento está a salvo. Pero si lo que encontraron en el apartamento de Dubois es cierto, el enemigo está más cerca de lo que creíamos. Su vuelo a Roma sale al amanecer. Directorio, fuera."
+};
+const $ = s => document.querySelector(s);
+const enc = new TextEncoder(), dec = new TextDecoder();
+const ub = b => Uint8Array.from(atob(b), c => c.charCodeAt(0));
+const norm = t => t.normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+async function kdf(ans, salt){
+  const base = await crypto.subtle.importKey('raw', enc.encode(norm(ans)), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt:ub(salt), iterations:120000, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, false, ['decrypt']);
+}
+const aesDec = (key, box) => crypto.subtle.decrypt({name:'AES-GCM', iv:ub(box.iv)}, key, ub(box.ct));
+async function tryAnswer(p, ans){
+  const k = await kdf(ans, p.salt);
+  for (const w of p.wraps){
+    try {
+      const raw = await aesDec(k, w);
+      const K = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['decrypt']);
+      return JSON.parse(dec.decode(await aesDec(K, p.reward)));
+    } catch(e) {}
+  }
+  return null;
+}
+async function getHint(p, i){ return dec.decode(await aesDec(await kdf('PISTA'+p.id+i, p.salt), p.hints[i])); }
+
+const fresh = () => ({ started:false, activeMs:0, runningSince:null, penaltyMin:0, exposure:0, errors:0, hints:{}, solved:{}, finishedAt:null, finalMs:null });
+let S = fresh(), docRef = null, ready = false, rewards = {}, hintText = {}, busy = false;
+const LS_OP = 'exp1776-operacion'; let LS = 'exp1776-paris';
+
+function elapsedMs(){ return S.activeMs + (S.runningSince ? Date.now() - S.runningSince : 0); }
+function remainingMs(){ return LIMIT_MIN*60000 - (S.finalMs ?? elapsedMs()) - S.penaltyMin*60000; }
+function fmt(ms){ const neg = ms < 0; ms = Math.abs(ms); const h = Math.floor(ms/3.6e6), m = Math.floor(ms%3.6e6/6e4), s = Math.floor(ms%6e4/1e3); return (neg?'−':'') + h + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0'); }
+
+async function save(){
+  try { localStorage.setItem(LS, JSON.stringify(S)); } catch(e) {}
+  if (docRef){ try { await FB.setDoc(docRef, JSON.parse(JSON.stringify(S))); $('#sync').textContent = 'Operación ' + OP + ' · avance guardado en el archivo de la agencia.'; } catch(e){ $('#sync').textContent = 'No se pudo guardar en el archivo. El avance queda en este dispositivo.'; } }
+}
+
+function tick(){
+  const r = remainingMs();
+  const c = $('#clock'); c.textContent = fmt(r); c.classList.toggle('low', r < 15*60000);
+  $('#expoN').textContent = S.exposure + '%'; $('#expoBar').style.width = Math.min(100,S.exposure) + '%';
+  $('#expo').classList.toggle('hot', S.exposure >= 70);
+}
+setInterval(tick, 1000);
+
+// ---------- audio ----------
+let tts = null, player = null;
+function audioWidget(el, key){
+  el.innerHTML = '';
+  const b = document.createElement('button'); b.className = 'btn-sm'; b.type = 'button';
+  b.textContent = '▶ Escuchar transmisión';
+  const note = document.createElement('span');
+  b.onclick = () => playAudio(key, b, note);
+  if (!AUDIOS[key] && !('speechSynthesis' in window)){ return; }
+  el.append(b, note);
+}
+function playAudio(key, b, note){
+  if (player){ player.pause(); player = null; }
+  if (AUDIOS[key]){
+    player = new Audio(AUDIOS[key]); player.play().catch(()=>{ note.textContent = 'No se pudo reproducir el audio.'; });
+    return;
+  }
+  if ('speechSynthesis' in window){ speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(TTS[key]); u.lang = 'es-ES'; u.rate = .92; u.pitch = .8; note.textContent = 'Voz provisional de la agencia'; speechSynthesis.speak(u); }
+}
+
+// ---------- render ----------
+function render(){
+  tick();
+  $('#pauseBtn').hidden = !S.started || !!S.finishedAt;
+  $('#pauseBtn').textContent = 'Pausar';
+  $('#pausedLayer').hidden = !(S.started && !S.finishedAt && !S.runningSince);
+  $('#briefing').hidden = S.started;
+  $('#startBtn').disabled = !ready; $('#startBtn').textContent = ready ? 'Iniciar misión' : 'Conectando…';
+  const m = $('#mission'); m.hidden = !S.started;
+  if (S.started) renderMission(m);
+  const f = $('#final'); f.hidden = !S.finishedAt;
+  if (S.finishedAt) renderFinal(f);
+  document.querySelectorAll('[data-audio]').forEach(el => audioWidget(el, el.dataset.audio));
+}
+
+function renderMission(m){
+  const keepVal = document.querySelector('#mission form.answer input')?.value || '';
+  m.innerHTML = '';
+  const alerts = [];
+  if (remainingMs() <= 0) alerts.push('La ventana de extracción se cerró. La misión continúa, pero la calificación máxima ahora es C.');
+  if (S.exposure >= 100) alerts.push('Exposición total: los Illuminati saben que están en París. La misión continúa, pero Roma empezará con 10 minutos menos.');
+  alerts.forEach(t => { const a = document.createElement('div'); a.className = 'alert'; a.textContent = t; m.append(a); });
+  let currentFound = false;
+  for (const p of MISION){
+    const card = document.createElement('article'); card.className = 'card obj';
+    const solved = S.solved[p.id] && rewards[p.id];
+    if (solved){
+      const r = rewards[p.id]; card.classList.add('done');
+      card.innerHTML = `<div class="kicker">${p.kicker} · Completado</div><h2>${r.title}</h2><div class="reward">${r.body.map(x=>`<p>${x}</p>`).join('')}</div>` +
+        (r.audio ? `<div class="audio" data-audio="${r.audio}"></div>` : '') +
+        (r.fragment ? `<div class="kicker">Fragmento recuperado</div><div class="frag">${r.fragment}</div>` : '') +
+        `<div class="order">ORDEN: ${r.action}</div>`;
+    } else if (!currentFound){
+      currentFound = true;
+      const used = S.hints[p.id] || 0;
+      card.innerHTML = `<div class="kicker">${p.kicker} · En curso</div><h2>${p.title}</h2><p style="margin:0;max-width:62ch">${p.prompt}</p>
+        <form class="answer" autocomplete="off"><input id="ans-${p.id}" aria-label="Respuesta" placeholder="${p.placeholder}" autocapitalize="characters" spellcheck="false"><button type="submit">Enviar</button></form>
+        <div class="msg" aria-live="polite"></div>
+        <div class="hints"></div>
+        <div class="row"><button class="btn-sm" type="button" data-hint>${used < 3 ? `Solicitar apoyo ${used+1} de 3 (+${HINT_MIN} min)` : 'Sin más apoyo disponible'}</button></div>`;
+      const hintsEl = card.querySelector('.hints');
+      for (let i=0;i<used;i++){ const h = document.createElement('div'); h.className='hint'; h.innerHTML = `<b>APOYO ${i+1}</b>`; const t = document.createElement('span'); t.textContent = hintText[p.id+i] || '…'; h.append(t); hintsEl.append(h);
+        if (!hintText[p.id+i]) getHint(p,i).then(x => { hintText[p.id+i] = x; t.textContent = x; }); }
+      const hb = card.querySelector('[data-hint]'); hb.disabled = used >= 3;
+      hb.onclick = async () => { if (busy || (S.hints[p.id]||0) >= 3) return; busy = true;
+        S.hints[p.id] = (S.hints[p.id]||0) + 1; S.penaltyMin += HINT_MIN; S.exposure = Math.min(100, S.exposure + HINT_EXPO);
+        await save(); busy = false; render(); };
+      const form = card.querySelector('form'), input = form.querySelector('input'), msg = card.querySelector('.msg');
+      input.value = keepVal;
+      form.onsubmit = async e => { e.preventDefault(); if (busy) return; const v = input.value; if (!norm(v)) return;
+        busy = true; msg.className = 'msg'; msg.textContent = 'Verificando con el Directorio…';
+        const r = await tryAnswer(p, v);
+        if (r){ rewards[p.id] = r; S.solved[p.id] = norm(v); input.value = '';
+          if (r.final){ S.finalMs = elapsedMs(); S.activeMs = S.finalMs; S.runningSince = null; S.finishedAt = Date.now(); }
+          await save(); busy = false; render();
+          setTimeout(()=>document.querySelectorAll('.obj.done')[Object.keys(S.solved).length-1]?.scrollIntoView({behavior:'smooth', block:'start'}), 50);
+        } else {
+          S.errors++; S.penaltyMin += ERR_MIN; S.exposure = Math.min(100, S.exposure + ERR_EXPO);
+          await save(); busy = false; tick();
+          msg.className = 'msg bad'; msg.textContent = `Respuesta rechazada. Penalización: +${ERR_MIN} min y +${ERR_EXPO}% de exposición.`;
+          form.classList.remove('shake'); void form.offsetWidth; form.classList.add('shake');
+        }
+      };
+    } else {
+      card.classList.add('locked');
+      card.innerHTML = `<div class="kicker">${p.kicker} · Bloqueado</div><div class="redact"></div>`;
+    }
+    m.append(card);
+  }
+}
+
+function rank(){
+  const totalHints = Object.values(S.hints).reduce((a,b)=>a+b,0);
+  const inTime = remainingMs() > 0;
+  if (!inTime || S.exposure >= 100) return ['C','Misión cumplida con daños'];
+  if (totalHints === 0 && S.errors <= 1) return ['S','Agentes fantasma'];
+  if (S.exposure < 50) return ['A','Operación limpia'];
+  return ['B','Misión cumplida'];
+}
+function renderFinal(f){
+  const [r, label] = rank();
+  const totalHints = Object.values(S.hints).reduce((a,b)=>a+b,0);
+  f.innerHTML = `<article class="card final"><div class="kicker">Misión 1 completada · París</div>
+    <div class="row" style="gap:22px"><div class="rank">${r}</div><div><h2>${label}</h2><div class="sub">Calificación del Directorio</div></div></div>
+    <dl class="res"><dt>Tiempo real</dt><dd>${fmt(S.finalMs)}</dd><dt>Penalizaciones</dt><dd>+${S.penaltyMin} min</dd><dt>Tiempo restante</dt><dd>${fmt(remainingMs())}</dd><dt>Errores</dt><dd>${S.errors}</dd><dt>Apoyos usados</dt><dd>${totalHints} de 12</dd><dt>Exposición</dt><dd>${S.exposure}%</dd></dl>
+    <div class="audio" data-audio="cierre"></div>
+    <p style="margin:0;max-width:62ch">Guarden el expediente de París. Algunas piezas volverán a ser necesarias en el desenlace. La misión 2, <b>Roma</b>, se desbloqueará cuando el Directorio la envíe.</p></article>`;
+}
+
+// ---------- controles ----------
+$('#startBtn').onclick = async () => { if (busy) return; busy = true; S.started = true; S.runningSince = Date.now(); await save(); busy = false; render(); };
+$('#pauseBtn').onclick = async () => { if (!S.runningSince) return; S.activeMs = elapsedMs(); S.runningSince = null; await save(); render(); };
+$('#resumeBtn').onclick = async () => { S.runningSince = Date.now(); await save(); render(); };
+$('#resetBtn').onclick = () => { $('#resetConfirm').hidden = false; $('#resetBtn').hidden = true; };
+$('#resetNo').onclick = () => { $('#resetConfirm').hidden = true; $('#resetBtn').hidden = false; };
+$('#resetYes').onclick = async () => { S = fresh(); rewards = {}; hintText = {}; await save(); $('#resetNo').onclick(); render(); };
+
+async function restoreRewards(){
+  for (const p of MISION){ if (S.solved[p.id] && !rewards[p.id]){ const r = await tryAnswer(p, S.solved[p.id]); if (r) rewards[p.id] = r; } }
+}
+async function applyRemote(data){
+  if (!data) return;
+  if (JSON.stringify(data) === JSON.stringify(S)) return;
+  S = Object.assign(fresh(), data); await restoreRewards(); render();
+}
+
+
+// ---------- Firebase ----------
+import { initializeApp, getAuth, signInAnonymously, getFirestore, doc, setDoc, onSnapshot } from './firebase.js';
+const firebaseConfig = {
+  apiKey: "AIzaSyDCeN7M2gPZynYc1m91m4lTYwxqi5qHo2I",
+  authDomain: "expediente1776.firebaseapp.com",
+  projectId: "expediente1776",
+  storageBucket: "expediente1776.firebasestorage.app",
+  messagingSenderId: "325760009900",
+  appId: "1:325760009900:web:0d5949b7b11fefd7ea0109"
+};
+const FB = { setDoc };
+let OP = null, unsub = null;
+
+async function detectAudios(){
+  for (const k of Object.keys(AUDIOS)){
+    try { const r = await fetch('../../audio/m1-' + k + '.mp3', {method:'HEAD'}); if (r.ok) AUDIOS[k] = '../../audio/m1-' + k + '.mp3'; } catch(e) {}
+  }
+  render();
+}
+
+function showOpGate(show){
+  $('#opGate').hidden = !show;
+  $('#startBtn').hidden = show;
+  $('#opInfo').hidden = show;
+  if (OP) $('#opName').textContent = OP;
+}
+
+async function connect(op){
+  OP = op; try { localStorage.setItem(LS_OP, op); } catch(e) {}
+  LS = 'exp1776-paris-' + op;
+  S = fresh(); rewards = {}; hintText = {};
+  try { const l = JSON.parse(localStorage.getItem(LS)); if (l) S = Object.assign(fresh(), l); } catch(e) {}
+  await restoreRewards(); ready = false; showOpGate(false); render();
+  $('#sync').textContent = 'Conectando con el archivo de la agencia…';
+  if (unsub) { unsub(); unsub = null; }
+  const timer = setTimeout(() => { ready = true; $('#sync').textContent = 'Sin conexión con el archivo. El avance se guarda en este dispositivo.'; render(); }, 10000);
+  try {
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app); await signInAnonymously(auth);
+    const db = getFirestore(app);
+    docRef = doc(db, 'partidas', 'paris-' + op);
+    unsub = onSnapshot(docRef, async snap => {
+      clearTimeout(timer);
+      if (snap.exists()) await applyRemote(snap.data());
+      else if (S.started) await save();
+      if (!ready){ ready = true; render(); }
+      $('#sync').textContent = 'Operación ' + OP + ' · sincronizada entre sus dispositivos.';
+    }, err => { clearTimeout(timer); docRef = null; ready = true; $('#sync').textContent = 'El archivo rechazó la conexión (' + err.code + '). El avance se guarda en este dispositivo.'; render(); });
+  } catch(e){ clearTimeout(timer); docRef = null; ready = true; $('#sync').textContent = 'No se pudo conectar con el archivo. El avance se guarda en este dispositivo.'; render(); }
+}
+
+$('#opForm').onsubmit = e => { e.preventDefault(); const v = norm($('#opInput').value); if (v.length < 4){ $('#opMsg').textContent = 'Usen al menos 4 letras o números.'; return; } connect(v); };
+$('#opChange').onclick = () => { if (S.started && !confirmChange){ confirmChange = true; $('#opChange').textContent = 'Toca otra vez para cambiar'; return; } confirmChange = false; $('#opChange').textContent = 'Cambiar'; try { localStorage.removeItem(LS_OP); } catch(e) {} if (unsub) unsub(); docRef = null; OP = null; S = fresh(); rewards = {}; render(); showOpGate(true); };
+let confirmChange = false;
+
+(function boot(){
+  render(); detectAudios();
+  let saved = null; try { saved = localStorage.getItem(LS_OP); } catch(e) {}
+  if (saved) connect(saved); else { showOpGate(true); $('#sync').textContent = 'Elijan un código de operación para empezar.'; }
+})();
+</script></body></html>
