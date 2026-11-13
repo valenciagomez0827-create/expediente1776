@@ -185,8 +185,8 @@ form.answer input:focus{box-shadow:0 0 0 4px rgba(196,154,69,.6)}
 .tx-stage{position:absolute;inset:56px 0 64px;display:grid;place-items:center}
 .sc{grid-area:1/1;width:min(1100px,92vw);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;opacity:0;visibility:hidden;transform:scale(1.04);filter:blur(6px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform 1.2s cubic-bezier(.16,1,.3,1),filter .7s,visibility 0s .7s}
 .sc.on{opacity:1;visibility:visible;transform:none;filter:none;transition:opacity .7s cubic-bezier(.16,1,.3,1),transform 1.2s cubic-bezier(.16,1,.3,1),filter .7s,visibility 0s}
-.sub{opacity:0;transform:translateY(10px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
-.sub.on{opacity:1;transform:none}
+.tx .sub{opacity:0;transform:translateY(10px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+.tx .sub.on{opacity:1;transform:none}
 .tx-big{margin:0;font:800 clamp(48px,10vw,132px)/.9 var(--display);font-variation-settings:"wdth" 75;text-transform:uppercase;letter-spacing:-.01em;text-wrap:balance}
 .tx-big.red{color:#d23a2f}
 .tx-mid{margin:0;font:700 clamp(22px,3.4vw,40px)/1.15 var(--display);font-variation-settings:"wdth" 85;text-wrap:balance}
@@ -250,6 +250,17 @@ form.answer input:focus{box-shadow:0 0 0 4px rgba(196,154,69,.6)}
 .cta-tx svg{width:16px;height:16px;fill:currentColor}
 @media (max-width:720px){.sc-lambert,.sc-pyr{flex-direction:column;text-align:center}.tx-photo{width:min(58vw,240px)}.tx-pyr{width:min(56vw,230px)}.tx-id,.tx-pyrtext{align-items:center}.tx-top{font-size:10px;letter-spacing:.12em}}
 @media (prefers-reduced-motion:reduce){.tx-grain,.tx-rec{animation:none}.sc,.sub{transition:opacity .4s}.sc{transform:none;filter:none}.tx-full{animation:none}.tx.burn .tx-stage,.tx.burn .tx-top,.tx.burn .tx-fuse{animation:none;opacity:0}}
+.step-tx{margin-top:26px;display:flex;justify-content:flex-start}
+.step-tx .cta-tx{margin-top:0;font-size:clamp(22px,2.6vw,30px);padding:20px 34px;gap:16px}
+.step-tx .cta-tx svg{width:20px;height:20px}
+.step-tx .cta-tx:not(.again){animation:call 2.6s cubic-bezier(.16,1,.3,1) infinite}
+@keyframes call{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+.step-tx .cta-tx.again{font-size:16px;padding:10px 18px;background:transparent;border:2px solid #c49a45;color:#c49a45;box-shadow:none}
+.step-tx .cta-tx.again svg{width:13px;height:13px}
+#protocolo.reveal{animation:reveal .9s cubic-bezier(.16,1,.3,1) both}
+@keyframes reveal{from{opacity:0;transform:translateY(24px) rotate(-.5deg)}to{opacity:1;transform:rotate(-.5deg)}}
+#briefing{margin-top:34px}
+@media (prefers-reduced-motion:reduce){.step-tx .cta-tx:not(.again){animation:none}#protocolo.reveal{animation:none}}
 </style>
 <style>body{margin:0}</style></head><body><div class="bar"><div class="wrap">
   <div class="brand">Directorio · <b>Terminal segura</b></div>
@@ -266,9 +277,7 @@ form.answer input:focus{box-shadow:0 0 0 4px rgba(196,154,69,.6)}
     <div class="t-copy">
       <p class="credit">El Directorio presenta</p>
       <h1><span class="w1">Expediente</span><span class="w2" aria-label="1776"><i>1</i><i>7</i><i>7</i><i>6</i></span></h1>
-      <p class="hook">Un archivista muerto en el Louvre. Una postal escrita en símbolos. Una sociedad secreta que, según él, nunca dejó de existir.</p>
       <p class="coords">Misión 1 de 5 · París · 48.8606° N, 2.3376° E</p>
-      <button type="button" class="cta-tx" id="ctaTx"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5v13l11-6.5z"/></svg>Iniciar transmisión</button>
     </div>
     <svg class="pyr" viewBox="0 0 400 380" role="img" aria-label="La pirámide del Louvre con un ojo en la cúspide">
       <polygon class="p-body" points="200,18 392,352 8,356"/>
@@ -293,23 +302,16 @@ form.answer input:focus{box-shadow:0 0 0 4px rgba(196,154,69,.6)}
         <form id="opForm" class="answer" autocomplete="off"><input id="opInput" aria-label="Código de operación" placeholder="Palabra secreta" autocapitalize="characters" spellcheck="false"><button type="submit">Conectar</button></form>
         <div class="msg bad" id="opMsg"></div>
       </div>
-      <div id="opInfo" class="sub" hidden>OPERACIÓN <b id="opName" style="color:var(--amber)"></b> <button class="btn-sm" id="opChange" type="button">Cambiar</button></div>
-      <button class="primary" id="startBtn" disabled>Conectando…</button></div>
+      <div id="opInfo" class="sub" hidden>OPERACIÓN <b id="opName" style="color:var(--amber)"></b> <button class="btn-sm" id="opChange" type="button">Cambiar</button></div></div>
     <span class="punched" aria-hidden="true">Mecha encendida</span>
   </div>
+  <div class="step-tx" id="stepTx" hidden><button type="button" class="cta-tx" id="ctaTx"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5v13l11-6.5z"/></svg><span id="ctaTxLabel">Iniciar transmisión</span></button></div>
 </header>
 
 
   <section id="briefing" class="stack">
-    <article class="card memo">
-      <div class="from">DE: Directorio<br>PARA: Agentes de campo designados<br>ASUNTO: Expediente 1776 / Operación París</div>
-      <div class="audio" data-audio="briefing"></div>
-      <p>Agentes:</p>
-      <p>Hace 72 horas, Henri Lambert, archivista del Museo del Louvre, fue encontrado sin vida en la sala de manuscritos. Antes de morir dejó una secuencia de símbolos escrita a mano en el reverso de una postal antigua.</p>
-      <p>Lambert llevaba años investigando una teoría que todos tomaban por locura: que los Illuminati de Baviera nunca se disolvieron en 1785, sino que pasaron a la clandestinidad y desde entonces han empujado al mundo hacia sus guerras más grandes. Según sus notas, la siguiente está a semanas de estallar, y la prueba que podría detenerla fue dividida en cinco fragmentos y escondida en varias ciudades.</p>
-      <p>Ustedes dos son los únicos agentes en quienes todavía confiamos. Sigan el rastro de Lambert, recuperen cada fragmento antes que ellos y no confíen en nadie. Ni siquiera en nosotros.</p>
-    </article>
-    <article class="card">
+    <div class="audio" data-audio="briefing" hidden></div>
+    <article class="card" id="protocolo" hidden>
       <h2>Protocolo de la misión</h2>
       <ol class="rules">
         <li>El Agente 1 abre el <b>SOBRE A</b> y el Agente 2 abre el <b>SOBRE B</b>. Cada uno puede leer en voz alta y describir lo que tiene, pero los documentos no se intercambian.</li>
@@ -318,6 +320,7 @@ form.answer input:focus{box-shadow:0 0 0 4px rgba(196,154,69,.6)}
         <li>Cada respuesta incorrecta suma <b>3 minutos</b> y un 10% de exposición. Cada solicitud de apoyo suma <b>5 minutos</b> y un 5%.</li>
         <li>Si la ventana se cierra o la exposición llega al 100%, la misión continúa, pero su calificación baja y la siguiente misión empezará con 10 minutos menos.</li>
       </ol>
+      <button class="primary" id="startBtn" disabled>Conectando…</button>
     </article>
   </section>
 
@@ -596,9 +599,20 @@ let confirmChange = false;
   if (saved) connect(saved); else { showOpGate(true); $('#sync').textContent = 'Elijan un código de operación para empezar.'; }
 })();
 </script><script>
-(function(){var b=document.getElementById('briefing'),t=document.getElementById('ticket'),i=document.getElementById('opInfo');
-function s(){if(t){t.hidden=b.hidden;t.classList.toggle('ok',!i.hidden);}}
-new MutationObserver(s).observe(b,{attributes:true});new MutationObserver(s).observe(i,{attributes:true});s();})();
+(function(){var b=document.getElementById('briefing'),t=document.getElementById('ticket'),i=document.getElementById('opInfo'),
+st=document.getElementById('stepTx'),pr=document.getElementById('protocolo'),lb=document.getElementById('ctaTxLabel'),cta=document.getElementById('ctaTx'),nm=document.getElementById('opName');
+function key(){return 'exp1776-tx-'+(nm.textContent||'');}
+function seen(){try{return localStorage.getItem(key())==='1';}catch(e){return false;}}
+var wasShown=!pr.hidden;
+function s(){var conn=!i.hidden,started=b.hidden,w=conn&&seen();
+ t.hidden=started;t.classList.toggle('ok',conn);
+ st.hidden=started||!conn;
+ lb.textContent=w?'Ver transmisión de nuevo':'Iniciar transmisión';cta.classList.toggle('again',w);
+ pr.hidden=!w;
+ if(w&&!wasShown){pr.classList.add('reveal');}
+ wasShown=w;}
+document.addEventListener('tx:closed',function(){if(!i.hidden){try{localStorage.setItem(key(),'1');}catch(e){}}var first=pr.hidden;s();if(first&&!pr.hidden){setTimeout(function(){pr.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});},650);}});
+[b,i].forEach(function(n){new MutationObserver(s).observe(n,{attributes:true});});new MutationObserver(s).observe(nm,{childList:true,characterData:true,subtree:true});s();})();
 (function(){var c=document.getElementById('clock'),p=document.getElementById('fusePath'),s=document.getElementById('spark');if(!c||!p)return;
 var L=p.getTotalLength(),first=true;
 function frac(){var t=c.textContent.trim(),neg=t.charAt(0)==='−';t=t.replace('−','');var a=t.split(':').map(Number);if(a.length<3||a.some(isNaN))return 1;var sec=a[0]*3600+a[1]*60+a[2];if(neg)return 0;return Math.max(0,Math.min(1,sec/7200));}
@@ -637,6 +651,7 @@ function close(){
   if(audio){try{audio.pause();}catch(e){}} if('speechSynthesis' in window)speechSynthesis.cancel();
   tx.classList.remove('on'); setTimeout(function(){tx.hidden=true;tx.classList.remove('burn');scenes.forEach(function(s){s.classList.remove('on');});document.documentElement.style.overflow='';},600);
   if(lastFocus&&lastFocus.focus)lastFocus.focus();
+  document.dispatchEvent(new Event('tx:closed'));
 }
 window.Transmision={start:function(a){
   lastFocus=document.activeElement; audio=a||null; t0=performance.now(); phase='play';
@@ -646,7 +661,6 @@ window.Transmision={start:function(a){
 }, close:close, _seek:function(s){if(audio)audio.currentTime=s;else t0=performance.now()-s*1000;}};
 document.getElementById('txSkip').addEventListener('click',close);
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&phase!=='idle')close();});
-var cta=document.getElementById('ctaTx'); if(cta)cta.addEventListener('click',function(){var b=document.querySelector('#briefing .audio button');if(b)b.click();});
-var br=document.getElementById('briefing');if(cta&&br){new MutationObserver(function(){cta.hidden=br.hidden;}).observe(br,{attributes:true});}
+var cta=document.getElementById('ctaTx'); if(cta)cta.addEventListener('click',function(){var b=document.querySelector('#briefing .audio button');if(b)b.click();else window.Transmision.start(null);});
 })();
 </script></body></html>
