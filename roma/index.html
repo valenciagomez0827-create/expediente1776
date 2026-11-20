@@ -256,7 +256,7 @@ form.answer input:focus{box-shadow:0 0 0 4px rgba(196,154,69,.6)}
 .cta-tx svg{width:16px;height:16px;fill:currentColor}
 @media (max-width:720px){.sc-lambert,.sc-pyr{flex-direction:column;text-align:center}.tx-photo{width:min(58vw,240px)}.tx-pyr{width:min(56vw,230px)}.tx-id,.tx-pyrtext{align-items:center}.tx-top{font-size:10px;letter-spacing:.12em}}
 @media (prefers-reduced-motion:reduce){.tx-grain,.tx-rec{animation:none}.sc,.sub{transition:opacity .4s}.sc{transform:none;filter:none}.tx-full{animation:none}.tx.burn .tx-stage,.tx.burn .tx-top,.tx.burn .tx-fuse{animation:none;opacity:0}}
-.step-tx{margin-top:26px;display:flex;justify-content:flex-start}
+.step-tx{margin-top:26px;display:flex;justify-content:flex-start;align-items:center;gap:14px;flex-wrap:wrap}
 .step-tx .cta-tx{margin-top:0;font-size:clamp(22px,2.6vw,30px);padding:20px 34px;gap:16px}
 .step-tx .cta-tx svg{width:20px;height:20px}
 .step-tx .cta-tx:not(.again){animation:call 2.6s cubic-bezier(.16,1,.3,1) infinite}
@@ -311,7 +311,7 @@ form.answer input:focus{box-shadow:0 0 0 4px rgba(196,154,69,.6)}
       <div id="opInfo" class="sub" hidden>OPERACIÓN <b id="opName" style="color:var(--amber)"></b> <button class="btn-sm" id="opChange" type="button">Cambiar</button></div></div>
     <span class="punched" aria-hidden="true">Mecha encendida</span>
   </div>
-  <div class="step-tx" id="stepTx" hidden><button type="button" class="cta-tx" id="ctaTx"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5v13l11-6.5z"/></svg><span id="ctaTxLabel">Iniciar transmisión</span></button></div>
+  <div class="step-tx" id="stepTx" hidden><button type="button" class="cta-tx" id="ctaTx"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5v13l11-6.5z"/></svg><span id="ctaTxLabel">Iniciar transmisión</span></button> <button type="button" class="btn-sm" id="txReset" hidden>Reiniciar transmisión</button></div>
 </header>
 
 
@@ -521,7 +521,7 @@ function renderFinal(f){
     <div class="row" style="gap:22px"><div class="rank">${r}</div><div><h2>${label}</h2><div class="sub">Calificación del Directorio</div></div></div>
     <dl class="res"><dt>Tiempo real</dt><dd>${fmt(S.finalMs)}</dd><dt>Penalizaciones</dt><dd>+${S.penaltyMin} min</dd><dt>Tiempo restante</dt><dd>${fmt(remainingMs())}</dd><dt>Errores</dt><dd>${S.errors}</dd><dt>Apoyos usados</dt><dd>${totalHints} de 12</dd><dt>Exposición</dt><dd>${S.exposure}%</dd></dl>
     <div class="audio" data-audio="cierre"></div>
-    <p style="margin:0;max-width:62ch">Guarden el expediente de Roma junto al de París. El enemigo ya no está fuera del Directorio. La misión 3, <b>Estambul</b>, se desbloqueará cuando el Directorio la envíe.</p></article>`;
+    <p style="margin:0;max-width:62ch">Guarden el expediente de París. Algunas piezas volverán a ser necesarias en el desenlace. La misión 2 ya está disponible.</p><a class="primary next-link" href="roma/" style="display:inline-block;text-decoration:none;text-align:center">Ir a la misión 2: Roma</a></article>`;
 }
 
 // ---------- controles ----------
@@ -611,11 +611,12 @@ var wasShown=!pr.hidden;
 function s(){var conn=!i.hidden,started=b.hidden,w=conn&&seen();
  t.hidden=started;t.classList.toggle('ok',conn);
  st.hidden=started||!conn;
- lb.textContent=w?'Ver transmisión de nuevo':'Iniciar transmisión';cta.classList.toggle('again',w);
+ lb.textContent=w?'Ver transmisión de nuevo':'Iniciar transmisión';var rb=document.getElementById('txReset');if(rb)rb.hidden=!w;cta.classList.toggle('again',w);
  pr.hidden=!w;
  if(w&&!wasShown){pr.classList.add('reveal');}
  wasShown=w;}
 document.addEventListener('tx:closed',function(){if(!i.hidden){try{localStorage.setItem(key(),'1');}catch(e){}}var first=pr.hidden;s();if(first&&!pr.hidden){setTimeout(function(){pr.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});},650);}});
+function unsee(){try{localStorage.removeItem(key());}catch(e){}s();}var rb0=document.getElementById('txReset');if(rb0)rb0.addEventListener('click',unsee);var ry=document.getElementById('resetYes');if(ry)ry.addEventListener('click',function(){setTimeout(unsee,50);});
 [b,i].forEach(function(n){new MutationObserver(s).observe(n,{attributes:true});});new MutationObserver(s).observe(nm,{childList:true,characterData:true,subtree:true});s();})();
 (function(){var c=document.getElementById('clock'),p=document.getElementById('fusePath'),s=document.getElementById('spark');if(!c||!p)return;
 var L=p.getTotalLength(),first=true;
