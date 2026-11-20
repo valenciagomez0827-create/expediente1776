@@ -1,0 +1,670 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Expediente 1776 · Roma</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<style>
+/* Layout: una sola columna tipo terminal segura; barra de estado fija arriba con reloj y exposición. Look oscuro deliberado. */
+:root{
+  --ink:#0e1513; --panel:#16201d; --line:#2a3a35; --paper:#e7e3d7; --muted:#8fa199;
+  --amber:#e3a83f; --red:#d65745; --ok:#6fbf8e;
+  --display:"Big Shoulders Stencil Display", Impact, "Arial Narrow", sans-serif;
+  --body:"IBM Plex Sans", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--ink);color:var(--paper)}
+body{font-family:var(--body);font-size:16px;line-height:1.55;
+  background-image:radial-gradient(circle at 20% 0%, #1b2a26 0, transparent 55%),repeating-linear-gradient(0deg, rgba(255,255,255,.015) 0 1px, transparent 1px 3px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ink)}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:rgba(14,21,19,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.bar .wrap{padding-block:10px;display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between}
+.brand{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.brand b{color:var(--amber);font-weight:600}
+.stats{display:flex;gap:18px;align-items:center;font-family:var(--mono);font-size:13px}
+.clock{font-size:20px;font-variant-numeric:tabular-nums;color:var(--paper)}
+.clock.low{color:var(--red)}
+.meter{display:flex;flex-direction:column;gap:3px;min-width:110px}
+.meter span{font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.meter i{display:block;height:6px;background:var(--line);border-radius:1px;overflow:hidden}
+.meter i b{display:block;height:100%;background:var(--amber);transition:width .4s}
+.meter.hot i b{background:var(--red)}
+.btn-sm{font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;background:none;color:var(--muted);border:1px solid var(--line);padding:6px 10px;border-radius:2px;cursor:pointer}
+.btn-sm:hover{color:var(--paper);border-color:var(--muted)}
+header.hero{padding-block:40px 24px}
+.stamp{display:inline-block;font:600 12px var(--mono);letter-spacing:.2em;color:var(--red);border:2px solid var(--red);padding:3px 10px;transform:rotate(-2deg);text-transform:uppercase}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(56px,14vw,104px);line-height:.9;margin:16px 0 8px;letter-spacing:.01em;text-wrap:balance}
+.sub{font-family:var(--mono);font-size:13px;color:var(--muted);letter-spacing:.06em}
+h2{font-family:var(--display);font-weight:600;font-size:30px;letter-spacing:.03em;margin:0;line-height:1.05;text-wrap:balance}
+.kicker{font:600 11px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--amber)}
+.card{background:var(--panel);border:1px solid var(--line);padding:22px;display:flex;flex-direction:column;gap:14px}
+.stack{display:flex;flex-direction:column;gap:18px}
+.memo p{margin:0 0 .8em;max-width:62ch}
+.memo .from{font-family:var(--mono);font-size:12px;color:var(--muted);border-bottom:1px dashed var(--line);padding-bottom:10px;line-height:1.7}
+.rules{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:62ch}
+.primary{font:800 22px var(--display);letter-spacing:.08em;text-transform:uppercase;background:var(--amber);color:var(--ink);border:0;padding:14px 22px;cursor:pointer;border-radius:2px;align-self:flex-start}
+.primary:hover{filter:brightness(1.08)}
+.primary:disabled{opacity:.5;cursor:wait}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.obj.locked{opacity:.55}
+.obj.locked .redact{font-family:var(--mono);color:transparent;background:repeating-linear-gradient(90deg,#2c3a36 0 10px,#26332f 10px 11px);user-select:none;height:16px;width:70%}
+.obj.done{border-color:#2f4a3c}
+.obj.done .kicker{color:var(--ok)}
+form.answer{display:flex;gap:10px;flex-wrap:wrap}
+form.answer input{flex:1 1 200px;min-width:0;font:600 18px var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:var(--paper);border:1px solid var(--line);padding:12px 14px;border-radius:2px}
+form.answer input:focus{border-color:var(--amber);outline:none}
+form.answer button{font:800 18px var(--display);letter-spacing:.1em;text-transform:uppercase;background:var(--paper);color:var(--ink);border:0;padding:0 20px;cursor:pointer;border-radius:2px;min-height:48px}
+.msg{font-family:var(--mono);font-size:13px;min-height:1.4em}
+.msg.bad{color:var(--red)}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.hints{display:flex;flex-direction:column;gap:8px}
+.hint{font-size:14px;border-left:2px solid var(--amber);padding:6px 12px;background:rgba(227,168,63,.06)}
+.hint b{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--amber);display:block}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.reward p{margin:0 0 .7em;max-width:62ch}
+.order{font-family:var(--mono);font-size:14px;color:var(--amber);border:1px dashed var(--amber);padding:10px 12px}
+.audio{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.audio button{display:inline-flex;align-items:center;gap:8px}
+.alert{border:1px solid var(--red);color:var(--red);padding:12px 14px;font-family:var(--mono);font-size:13px}
+.final{text-align:left}
+.rank{font-family:var(--display);font-weight:800;font-size:120px;line-height:.85;color:var(--amber)}
+.frag{font-family:var(--display);font-size:44px;letter-spacing:.3em;border:2px solid var(--paper);padding:8px 18px;align-self:flex-start}
+dl.res{display:grid;grid-template-columns:auto 1fr;gap:4px 18px;margin:0;font-family:var(--mono);font-size:14px}
+dl.res dt{color:var(--muted)} dl.res dd{margin:0;font-variant-numeric:tabular-nums}
+.foot{margin-top:40px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.paused{position:fixed;inset:0;z-index:20;background:rgba(10,15,14,.92);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;padding:24px;text-align:center}
+.paused h2{font-size:48px}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.tx-over{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:0 6vw;text-shadow:0 2px 18px rgba(0,0,0,.85)}
+.tx-full.sub{opacity:0;transition:opacity 1.2s}.tx-full.sub.on{opacity:1}
+.rw-img{margin:0 0 16px;background:#efe3cf;padding:8px;max-width:640px;box-shadow:0 14px 30px rgba(0,0,0,.45)}
+.rw-img img{display:block;width:100%;height:auto;max-height:440px;object-fit:cover}
+.rw-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;max-width:820px}
+.next-link{display:inline-block;margin-top:6px}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,500..800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+:root{
+  --ground:#e4572e; --ground-2:#d64b23; --black:#141010; --paper-w:#f7efe2; --spark:#ffd166;
+  --paper:#141010; --muted:#4a2a1d; --line:#b8401d; --panel:#f7efe2; --ink:#fffaf2;
+  --amber:#141010; --red:#8f160e; --ok:#1d5c3a;
+  --display:"Bricolage Grotesque","Arial Narrow",sans-serif; --body:"Atkinson Hyperlegible",system-ui,sans-serif; --mono:"Atkinson Hyperlegible",system-ui,sans-serif;
+  color-scheme:light;
+}
+html,body{background:var(--ground);color:var(--paper)}
+body{font-size:17px;background:var(--ground)}
+body::before{background:var(--black)}
+::selection{background:var(--black);color:var(--spark)}
+.wrap{max-width:1120px}
+.bar{background:var(--black);border-bottom:0}
+.brand{font:700 13px var(--body);letter-spacing:.12em;color:#c9b8ad}.brand b{color:var(--spark)}
+.meter span{font:700 11px var(--body);letter-spacing:.12em;color:#c9b8ad}
+.clock{font:800 26px var(--display);font-variation-settings:"wdth" 80;color:var(--paper-w);font-variant-numeric:tabular-nums}
+.clock.low{color:var(--spark)}
+.meter i{background:#3a2a24}.meter i b{background:var(--spark)}.meter.hot i b{background:var(--ground)}
+#expoN{font-style:normal;color:var(--spark)}
+.bar .btn-sm{color:var(--paper-w);border-color:#5a4840}
+.titles{padding-block:clamp(28px,5vw,60px) 30px;position:relative}
+.t-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:clamp(16px,4vw,48px);align-items:end}
+.credit{margin:0 0 10px;font:700 15px var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--black)}
+.titles h1{margin:0;font-family:var(--display);color:var(--black);line-height:.82}
+.w1{display:block;font-size:clamp(44px,7.4vw,96px);font-weight:800;font-variation-settings:"wdth" 75;letter-spacing:-.01em;text-transform:uppercase}
+.w2{display:flex;gap:.02em;font-size:clamp(120px,21vw,272px);font-weight:800;font-variation-settings:"wdth" 75;letter-spacing:-.03em;color:var(--paper-w)}
+.w2 i{font-style:normal;display:inline-block;text-shadow:0 6px 0 rgba(20,16,16,.0);filter:drop-shadow(0 8px 10px rgba(30,12,6,.35))}
+.w2 i:nth-child(1){transform:rotate(-3deg) translateY(4px)}.w2 i:nth-child(2){transform:rotate(2deg)}.w2 i:nth-child(3){transform:rotate(-1.5deg) translateY(-6px);color:var(--black)}.w2 i:nth-child(4){transform:rotate(3deg) translateY(2px)}
+.hook{margin:18px 0 10px;max-width:30ch;font:500 clamp(21px,2.2vw,27px)/1.3 var(--display);font-variation-settings:"wdth" 92;color:var(--black);text-wrap:balance}
+.coords{margin:0;font:700 13px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--black)}
+.pyr{width:100%;height:auto;filter:drop-shadow(0 14px 18px rgba(30,12,6,.35))}
+.fuse{display:block;width:100%;height:auto;margin:clamp(4px,1vw,10px) 0 -26px;overflow:visible}
+#spark{transition:opacity .3s}#spark path{transform-origin:0 0;animation:flick .18s steps(2) infinite}
+@keyframes flick{50%{transform:rotate(28deg) scale(.82)}}
+.ticket{position:relative;background:var(--paper-w);padding:24px clamp(18px,3vw,30px) 26px;transform:rotate(-1deg);box-shadow:0 18px 30px rgba(30,12,6,.35),0 2px 4px rgba(30,12,6,.25);max-width:640px}
+.ticket h2{margin:0 0 4px;font:800 28px var(--display);font-variation-settings:"wdth" 80;text-transform:uppercase}
+.ticket p{color:#3b2a22}
+.ticket .sub{font:700 14px var(--body);letter-spacing:.1em;color:var(--black)}.ticket .sub b{color:var(--red)!important}
+.punched{position:absolute;right:-10px;top:-18px;background:var(--black);color:var(--spark);font:800 15px var(--display);font-variation-settings:"wdth" 80;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;transform:rotate(4deg) scale(.6);opacity:0;transition:opacity .3s,transform .5s cubic-bezier(.16,1,.3,1)}
+.ticket.ok .punched{opacity:1;transform:rotate(4deg) scale(1)}
+form.answer input{font:700 22px var(--display);font-variation-settings:"wdth" 85;background:#fff;color:var(--black);border:3px solid var(--black);border-radius:0}
+form.answer input::placeholder{color:#8a6f62}
+form.answer input:focus{outline:none;box-shadow:0 0 0 4px rgba(255,209,102,.9)}
+form.answer button,.primary{font:800 22px var(--display);font-variation-settings:"wdth" 80;letter-spacing:.04em;text-transform:uppercase;background:var(--black);color:var(--paper-w);border:0;border-radius:0;padding:14px 28px;min-height:54px;cursor:pointer;transition:transform .2s cubic-bezier(.16,1,.3,1),box-shadow .2s}
+.primary:hover,form.answer button:hover{transform:translateY(-2px);box-shadow:0 8px 16px rgba(30,12,6,.35)}
+.primary:disabled{opacity:.6;transform:none}
+.msg.bad{color:var(--red)}
+h2{font:800 34px/1 var(--display);font-variation-settings:"wdth" 78;text-transform:uppercase;color:var(--black)}
+.card{background:var(--panel);border:0;box-shadow:0 16px 28px rgba(30,12,6,.28),0 2px 4px rgba(30,12,6,.2);padding:clamp(22px,3.4vw,36px)}
+.stack{gap:30px}
+#briefing>.card:nth-child(1){transform:rotate(.6deg)}#briefing>.card:nth-child(2){transform:rotate(-.5deg)}
+.kicker{font:700 12px var(--body);letter-spacing:.16em;color:var(--red)}
+.memo .from{font:700 14px/1.7 var(--body);color:#5a3a2c;border-bottom:3px solid var(--black)}
+.btn-sm{font:700 12px var(--body);letter-spacing:.1em;color:var(--black);border:2px solid var(--black);background:transparent;border-radius:0}
+.btn-sm:hover{background:var(--black);color:var(--paper-w)}
+.hint{border-left:0;background:#fde3c8;box-shadow:inset 0 0 0 2px #f2b98d}.hint b{color:var(--red)}
+.order{color:var(--black);border:3px dashed var(--black);font:700 16px var(--body)}
+.alert{border:3px solid var(--black);background:var(--spark);color:var(--black);font-family:var(--body);font-weight:700}
+.obj.locked .redact{background:var(--black)}
+.obj.done .kicker{color:var(--ok)}
+.rank{color:var(--ground);font-family:var(--display)}
+.frag{border:3px solid var(--black);font-family:var(--display)}
+.foot{color:var(--black);font:700 13px var(--body)}
+.foot .btn-sm{border-color:var(--black)}
+.paused{background:rgba(20,16,16,.94);color:var(--paper-w)}.paused h2{color:var(--paper-w)}.paused .kicker{color:var(--spark)}
+:focus-visible{outline:3px solid var(--black);outline-offset:3px}
+@media (max-width:760px){.t-grid{grid-template-columns:1fr}.pyr{width:48%;justify-self:end;order:-1;margin-bottom:-6px}.fuse{margin-bottom:-14px}.ticket{transform:none}}
+@media (prefers-reduced-motion:reduce){#spark path{animation:none}}
+.p-body{fill:var(--pyr,#141010)}.p-side{fill:var(--pyr-side,#2a1d18)}.p-lines{stroke:var(--pyr-line,#e4572e);opacity:var(--pyr-line-o,.55)}.p-tri{fill:var(--tri,#e4572e)}.p-eye{fill:var(--eye,#f7efe2)}.p-pupil{fill:var(--pupil,#141010)}.p-base{fill:var(--pyr,#141010)}
+.p-roman{fill:var(--roman,transparent);font:700 15px var(--display);letter-spacing:.4em}
+.f-cord{stroke:var(--cord,#141010)}.f-burnt{stroke:var(--cord,#141010)}
+.credit,.titles h1,.w1,.hook,.coords,.foot{color:var(--fg,var(--black))}.w2{color:var(--num,var(--paper-w))}.w2 i:nth-child(3){color:var(--num-alt,var(--black))}
+.foot .btn-sm{color:var(--fg,var(--black));border-color:var(--fg,var(--black))}
+</style>
+<style>
+/* Variante Logia: borgoña de lacre, negro y oro viejo */
+:root{--ground:#2b0a10;--black:#0d0507;--paper-w:#efe3cf;--spark:#f0c86a;--panel:#efe3cf;--red:#8f1a1f;
+  --fg:#efe3cf;--num:#efe3cf;--num-alt:#c49a45;--pyr:#0d0507;--pyr-side:#24090d;--pyr-line:#c49a45;--pyr-line-o:.6;--tri:#9e1b22;--eye:#efe3cf;--pupil:#0d0507;--roman:#c49a45;--cord:#c49a45}
+html,body{background:var(--ground)}
+body{background-color:var(--ground);background-image:radial-gradient(ellipse at 70% 30%,rgba(158,27,34,.35),transparent 55%),radial-gradient(ellipse at 50% 120%,rgba(0,0,0,.55),transparent 60%)}
+.hook{color:#dccbb2}.coords,.credit{color:#c49a45}
+.w2 i{filter:drop-shadow(0 8px 12px rgba(0,0,0,.5))}
+.pyr{filter:drop-shadow(0 18px 24px rgba(0,0,0,.55))}
+.ticket,.card{box-shadow:0 18px 32px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.4)}
+.bar{background:#120306;border-bottom:1px solid rgba(196,154,69,.35)}.brand b,#expoN{color:#c49a45}.meter i b{background:#c49a45}
+form.answer input:focus{box-shadow:0 0 0 4px rgba(196,154,69,.6)}
+.punched{background:#9e1b22;color:#efe3cf}
+::selection{background:#c49a45;color:#0d0507}
+:focus-visible{outline-color:#c49a45}
+.p-body{stroke:var(--pyr-line);stroke-width:2.5;stroke-opacity:.75;stroke-linejoin:round}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap">
+<style>
+.tx{position:fixed;inset:0;z-index:60;background:#0b0305;color:#efe3cf;overflow:hidden;font-family:var(--body);opacity:0;transition:opacity .6s cubic-bezier(.16,1,.3,1)}
+.tx.on{opacity:1}
+.tx::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(158,27,34,.28),transparent 62%),radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,.75));pointer-events:none}
+.tx-grain{position:absolute;inset:-50%;opacity:.12;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain .5s steps(4) infinite}
+@keyframes grain{25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}}
+.tx-top{position:absolute;top:0;left:0;right:0;display:flex;gap:14px;align-items:center;justify-content:center;padding:max(14px,env(safe-area-inset-top)) 16px 14px;background:#000;font:700 12px var(--body);letter-spacing:.2em;text-transform:uppercase;color:#c49a45;z-index:3}
+.tx-rec{width:9px;height:9px;border-radius:50%;background:#d23a2f;animation:rec 1.2s steps(2) infinite}
+@keyframes rec{50%{opacity:.15}}
+#txTime{font-variant-numeric:tabular-nums;color:#efe3cf}
+.tx-stage{position:absolute;inset:56px 0 64px;display:grid;place-items:center}
+.sc{grid-area:1/1;width:min(1100px,92vw);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;opacity:0;visibility:hidden;transform:scale(1.04);filter:blur(6px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform 1.2s cubic-bezier(.16,1,.3,1),filter .7s,visibility 0s .7s}
+.sc.on{opacity:1;visibility:visible;transform:none;filter:none;transition:opacity .7s cubic-bezier(.16,1,.3,1),transform 1.2s cubic-bezier(.16,1,.3,1),filter .7s,visibility 0s}
+.tx .sub{opacity:0;transform:translateY(10px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+.tx .sub.on{opacity:1;transform:none}
+.tx-big{margin:0;font:800 clamp(48px,10vw,132px)/.9 var(--display);font-variation-settings:"wdth" 75;text-transform:uppercase;letter-spacing:-.01em;text-wrap:balance}
+.tx-big.red{color:#d23a2f}
+.tx-mid{margin:0;font:700 clamp(22px,3.4vw,40px)/1.15 var(--display);font-variation-settings:"wdth" 85;text-wrap:balance}
+.tx-mid.gold,.tx-mid b{color:#c49a45}
+.tx-small{margin:0;font:400 clamp(15px,1.6vw,19px)/1.5 var(--body);letter-spacing:.04em;color:#dccbb2}
+.tx-small b{color:#c49a45}.tx-small.dim{color:#a48f7c}
+.tx-whisper{margin:0;font:italic 400 clamp(18px,2.2vw,26px)/1.4 var(--body);color:#a48f7c;letter-spacing:.06em}
+.tx-decode{margin:0;font:800 clamp(34px,7vw,92px)/1 var(--display);font-variation-settings:"wdth" 75;letter-spacing:.02em;color:#efe3cf}
+.sc-lambert{flex-direction:row;gap:clamp(20px,5vw,60px);text-align:left}
+.tx-photo{position:relative;margin:0;width:min(34vw,300px);background:#efe3cf;padding:10px 10px 12px;transform:rotate(-2.5deg);box-shadow:0 24px 40px rgba(0,0,0,.6)}
+.tx-photo img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;filter:grayscale(.85) contrast(1.08)}
+.tx-stamp{position:absolute;left:8%;bottom:16%;font:800 clamp(26px,4vw,44px) var(--display);font-variation-settings:"wdth" 75;letter-spacing:.08em;text-transform:uppercase;color:#d23a2f;border:4px solid #d23a2f;padding:2px 14px;transform:rotate(-12deg) scale(1.8);opacity:0;mix-blend-mode:multiply;transition:transform .35s cubic-bezier(.3,1.6,.5,1),opacity .2s}
+.tx-stamp.on{opacity:.92;transform:rotate(-12deg) scale(1)}
+.tx-id{display:flex;flex-direction:column;gap:8px}
+.tx-name{margin:0;font:800 clamp(40px,7vw,88px)/.9 var(--display);font-variation-settings:"wdth" 75;text-transform:uppercase}
+.sc-escena{width:100vw;height:100%;position:relative}
+.tx-full{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15) brightness(.55);animation:kb 6s linear both}
+.sc-escena.on .tx-full{animation:kb 6s linear both}
+@keyframes kb{from{transform:scale(1.02)}to{transform:scale(1.14)}}
+.tx-caption{position:absolute;bottom:6%;left:0;right:0;margin:0;font:700 clamp(16px,2vw,22px) var(--body);letter-spacing:.2em;text-transform:uppercase;color:#efe3cf}
+.sc-sym{gap:26px}
+.tx-glyphs{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(8px,1.4vw,16px);max-width:720px}
+.tx-glyphs svg{width:clamp(34px,5vw,56px);height:auto;stroke:#c49a45;stroke-width:5;fill:none;stroke-linecap:square;opacity:0;transform:scale(.6);transition:opacity .3s,transform .4s cubic-bezier(.16,1,.3,1)}
+.tx-glyphs svg.on{opacity:1;transform:none}
+.tx-glyphs svg circle{fill:#c49a45;stroke:none}
+.tx-postal{margin:0;width:min(60vw,440px);background:#efe3cf;padding:8px;box-shadow:0 24px 40px rgba(0,0,0,.6);transform:rotateY(70deg) rotate(3deg);transition:opacity .6s,transform 1s cubic-bezier(.16,1,.3,1)}
+.tx-postal.on{transform:rotate(3deg)}
+.tx-postal img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover}
+.tx-postal figcaption{font:600 22px "Caveat",cursive;color:#23336b;text-align:left;padding:6px 4px 0}
+.tx-hand{margin:0;font:600 clamp(36px,6vw,72px)/1.1 "Caveat",cursive;color:#efe3cf;transform:rotate(-2deg)}
+.sc-pyr{flex-direction:row;gap:clamp(20px,5vw,64px);text-align:left}
+.tx-pyr{width:min(36vw,340px);height:auto;overflow:visible}
+.tx-pyr .d{fill:none;stroke:#c49a45;stroke-width:3;stroke-dasharray:1200;stroke-dashoffset:1200}
+.sc-pyr.on .tx-pyr .d{animation:draw 2.4s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.tx-pyr .tri{fill:#9e1b22;opacity:0;transition:opacity 1s 1.4s}.sc-pyr.on .tx-pyr .tri{opacity:1}
+.tx-pyr .eye{transform-origin:200px 103px;opacity:0;transition:opacity .8s 1.8s,transform .5s}.sc-pyr.on .tx-pyr .eye{opacity:1}
+.sc-pyr.closed .tx-pyr .eye{transform:scaleY(.06)}
+.tx-pyrtext{display:flex;flex-direction:column;gap:10px}
+.tx-pyrtext s{text-decoration-color:#d23a2f;text-decoration-thickness:4px}
+.tx-frags{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(8px,1.6vw,18px);width:min(820px,92vw)}
+.tx-frags li{aspect-ratio:3/4;border:2px solid #5a2a2e;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(0,0,0,.25)}
+.tx-frags b{font:800 clamp(26px,4vw,48px) var(--display);color:#6e3a3e}
+.tx-frags li.lit{border-color:#c49a45;box-shadow:0 10px 30px rgba(196,154,69,.25);background:rgba(196,154,69,.08)}.tx-frags li.lit b{color:#c49a45}
+.tx-frags span{font:700 clamp(13px,1.6vw,19px) var(--body);letter-spacing:.12em;text-transform:uppercase;color:#efe3cf}
+.tx-frags span.blk{display:block;width:70%;height:12px;background:#efe3cf;opacity:0}.tx-frags span.blk.on{opacity:.85}
+.tx-badges{display:flex;gap:clamp(14px,4vw,40px)}
+.tx-badges span{font:800 clamp(22px,3.4vw,38px) var(--display);font-variation-settings:"wdth" 80;text-transform:uppercase;letter-spacing:.06em;border:3px solid #c49a45;color:#c49a45;padding:14px 24px;opacity:0;transition:transform 1s cubic-bezier(.16,1,.3,1),opacity .8s}
+.tx-badges span:first-child{transform:translateX(-40px)}.tx-badges span:last-child{transform:translateX(40px)}
+.sc-agents.on .tx-badges span{opacity:1;transform:none}
+.tx-count{margin:0;font:800 clamp(120px,24vw,300px)/1 var(--display);color:#d23a2f;font-variant-numeric:tabular-nums}
+.tx-fuse{position:absolute;left:6vw;right:6vw;bottom:34px;height:3px;background:rgba(196,154,69,.18)}
+.tx-fuse i{position:absolute;left:0;top:0;bottom:0;background:#c49a45;width:100%}
+.tx-fuse i::after{content:"";position:absolute;right:-6px;top:-5px;width:13px;height:13px;border-radius:50%;background:#ffe3a1;box-shadow:0 0 14px 4px rgba(240,200,106,.8)}
+.tx-skip{position:absolute;right:16px;bottom:max(52px,calc(env(safe-area-inset-bottom) + 46px));z-index:3;font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;background:transparent;color:#dccbb2;border:1px solid #5a4840;padding:8px 12px;cursor:pointer}
+.tx-skip:hover{color:#fff;border-color:#c49a45}
+.tx.burn .tx-stage,.tx.burn .tx-top,.tx.burn .tx-fuse{animation:burn 1.6s cubic-bezier(.6,0,.8,.4) forwards}
+@keyframes burn{0%{filter:none;opacity:1}40%{filter:brightness(2.2) sepia(1) saturate(4) blur(1px)}100%{filter:brightness(3) blur(14px);opacity:0;transform:scale(1.08)}}
+.cta-tx{display:inline-flex;align-items:center;gap:12px;margin-top:22px;font:800 20px var(--display);font-variation-settings:"wdth" 80;letter-spacing:.06em;text-transform:uppercase;background:#9e1b22;color:#efe3cf;border:0;padding:14px 24px;cursor:pointer;box-shadow:0 12px 24px rgba(0,0,0,.45);transition:transform .2s cubic-bezier(.16,1,.3,1),background .2s}
+.cta-tx:hover{background:#b8232b;transform:translateY(-2px)}
+.cta-tx svg{width:16px;height:16px;fill:currentColor}
+@media (max-width:720px){.sc-lambert,.sc-pyr{flex-direction:column;text-align:center}.tx-photo{width:min(58vw,240px)}.tx-pyr{width:min(56vw,230px)}.tx-id,.tx-pyrtext{align-items:center}.tx-top{font-size:10px;letter-spacing:.12em}}
+@media (prefers-reduced-motion:reduce){.tx-grain,.tx-rec{animation:none}.sc,.sub{transition:opacity .4s}.sc{transform:none;filter:none}.tx-full{animation:none}.tx.burn .tx-stage,.tx.burn .tx-top,.tx.burn .tx-fuse{animation:none;opacity:0}}
+.step-tx{margin-top:26px;display:flex;justify-content:flex-start}
+.step-tx .cta-tx{margin-top:0;font-size:clamp(22px,2.6vw,30px);padding:20px 34px;gap:16px}
+.step-tx .cta-tx svg{width:20px;height:20px}
+.step-tx .cta-tx:not(.again){animation:call 2.6s cubic-bezier(.16,1,.3,1) infinite}
+@keyframes call{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+.step-tx .cta-tx.again{font-size:16px;padding:10px 18px;background:transparent;border:2px solid #c49a45;color:#c49a45;box-shadow:none}
+.step-tx .cta-tx.again svg{width:13px;height:13px}
+#protocolo.reveal{animation:reveal .9s cubic-bezier(.16,1,.3,1) both}
+@keyframes reveal{from{opacity:0;transform:translateY(24px) rotate(-.5deg)}to{opacity:1;transform:rotate(-.5deg)}}
+#briefing{margin-top:34px}
+@media (prefers-reduced-motion:reduce){.step-tx .cta-tx:not(.again){animation:none}#protocolo.reveal{animation:none}}
+</style>
+<style>body{margin:0}</style></head><body><div class="bar"><div class="wrap">
+  <div class="brand">Directorio · <b>Terminal segura</b></div>
+  <div class="stats">
+    <div><div class="meter"><span>Ventana de extracción</span></div><div class="clock" id="clock">2:00:00</div></div>
+    <div class="meter" id="expo"><span>Exposición <em id="expoN">0%</em></span><i><b id="expoBar" style="width:0%"></b></i></div>
+    <button class="btn-sm" id="pauseBtn" hidden>Pausar</button>
+  </div>
+</div></div>
+
+<main class="wrap">
+  <header class="titles">
+  <div class="t-grid">
+    <div class="t-copy">
+      <p class="credit">El Directorio presenta</p>
+      <h1><span class="w1">Expediente</span><span class="w2" aria-label="1776"><i>1</i><i>7</i><i>7</i><i>6</i></span></h1>
+      <p class="coords">Misión 2 de 5 · Roma · 41.8986° N, 12.4769° E</p>
+    </div>
+    <svg class="pyr" viewBox="0 0 400 380" role="img" aria-label="Una pirámide con un ojo en la cúspide">
+      <polygon class="p-body" points="200,18 392,352 8,356"/>
+      <polygon class="p-side" points="200,18 214,40 382,346 392,352"/>
+      <g class="p-lines" stroke-width="3"><line x1="104" y1="187" x2="300" y2="187"/><line x1="56" y1="270" x2="346" y2="270"/><line x1="200" y1="18" x2="200" y2="354"/><line x1="152" y1="104" x2="250" y2="268"/><line x1="248" y1="104" x2="150" y2="268"/></g>
+      <polygon class="p-tri" points="200,54 238,118 162,118"/>
+      <path d="M170 104 Q200 78 230 104 Q200 126 170 104Z" class="p-eye"/>
+      <circle class="p-pupil" cx="200" cy="103" r="10"/>
+      <polygon class="p-base" points="0,358 400,350 400,380 0,380"/><text class="p-roman" x="200" y="373" text-anchor="middle">MDCCLXXVI</text>
+    </svg>
+  </div>
+  <svg class="fuse" viewBox="0 0 1000 150" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    <path id="fusePath" d="M40 140 C 40 80, 120 60, 240 70 S 420 120, 540 80 S 760 20, 860 60 S 980 110, 960 30" fill="none" class="f-cord" stroke-width="7" stroke-linecap="round" stroke-dasharray="1 0"/>
+    <path id="fuseBurnt" d="M40 140 C 40 80, 120 60, 240 70 S 420 120, 540 80 S 760 20, 860 60 S 980 110, 960 30" fill="none" class="f-burnt" stroke-width="2" stroke-dasharray="2 10" opacity=".35"/>
+    <g id="spark"><circle r="16" fill="#ffd166" opacity=".35"/><circle r="8" fill="#fff4cf"/><path d="M0 -20 L3 -6 L18 -10 L6 0 L18 12 L2 6 L-4 20 L-5 5 L-19 9 L-7 -1 L-17 -13 L-3 -6Z" fill="#ffd166"/></g>
+  </svg>
+  <div class="ticket" id="ticket">
+    <div class="ticket-face">
+      <div id="opGate" class="stack" hidden style="gap:10px">
+        <h2>Código de operación</h2>
+        <p style="margin:0;max-width:62ch">Elijan una palabra secreta para su partida y escríbanla igual en los dos dispositivos. Así ambos verán el mismo avance.</p>
+        <form id="opForm" class="answer" autocomplete="off"><input id="opInput" aria-label="Código de operación" placeholder="Palabra secreta" autocapitalize="characters" spellcheck="false"><button type="submit">Conectar</button></form>
+        <div class="msg bad" id="opMsg"></div>
+      </div>
+      <div id="opInfo" class="sub" hidden>OPERACIÓN <b id="opName" style="color:var(--amber)"></b> <button class="btn-sm" id="opChange" type="button">Cambiar</button></div></div>
+    <span class="punched" aria-hidden="true">Mecha encendida</span>
+  </div>
+  <div class="step-tx" id="stepTx" hidden><button type="button" class="cta-tx" id="ctaTx"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5v13l11-6.5z"/></svg><span id="ctaTxLabel">Iniciar transmisión</span></button></div>
+</header>
+
+
+  <section id="briefing" class="stack">
+    <div class="audio" data-audio="briefing" hidden></div>
+    <article class="card" id="protocolo" hidden>
+      <h2>Protocolo de la misión</h2>
+      <ol class="rules">
+        <li>El Agente 1 abre el <b>SOBRE A</b> y el Agente 2 abre el <b>SOBRE B</b>. Cada uno puede leer en voz alta y describir lo que tiene, pero los documentos no se intercambian.</li>
+        <li>El <b>SOBRE C</b> permanece sellado hasta que esta terminal lo ordene.</li>
+        <li>Tienen <b>2 horas</b> antes de que se cierre la ventana de extracción. El reloj solo corre con la misión activa; pueden pausarla.</li>
+        <li>Cada respuesta incorrecta suma <b>3 minutos</b> y un 10% de exposición. Cada solicitud de apoyo suma <b>5 minutos</b> y un 5%.</li>
+        <li>Si la ventana se cierra o la exposición llega al 100%, la misión continúa, pero su calificación baja y la siguiente misión empezará con 10 minutos menos.</li>
+      </ol>
+      <button class="primary" id="startBtn" disabled>Conectando…</button>
+    </article>
+  </section>
+
+  <section id="mission" class="stack" hidden></section>
+  <section id="final" class="stack" hidden></section>
+
+  <div class="foot">
+    <span id="sync">Conectando con el archivo…</span>
+    <button class="btn-sm" id="resetBtn">Reiniciar misión</button>
+    <span id="resetConfirm" hidden>¿Seguro? Se borra todo el avance. <button class="btn-sm" id="resetYes">Sí, reiniciar</button> <button class="btn-sm" id="resetNo">Cancelar</button></span>
+  </div>
+</main>
+
+<div class="paused" id="pausedLayer" hidden>
+  <p class="kicker">Misión en pausa</p>
+  <h2>El reloj está detenido</h2>
+  <button class="primary" id="resumeBtn">Reanudar misión</button>
+</div>
+<div id="tx" class="tx" hidden role="dialog" aria-modal="true" aria-label="Transmisión del Directorio">
+  <div class="tx-grain" aria-hidden="true"></div>
+  <div class="tx-top"><span class="tx-rec"></span><span>Transmisión cifrada · Directorio</span><span id="txTime">00:00</span></div>
+  <div class="tx-stage" aria-hidden="true">
+    <section class="sc" data-a="0" data-b="4.5"><p class="tx-decode" data-text="TRANSMISIÓN CIFRADA">TRANSMISIÓN CIFRADA</p><p class="tx-small sub" data-a="2.7">Misión <b>2 de 5</b></p></section>
+    <section class="sc sc-escena" data-a="4.6" data-b="9.55"><img class="tx-full" src="img/t-roma.jpg" alt=""><div class="tx-over"><p class="tx-big">Roma</p><p class="tx-mid gold sub" data-a="7.6">La Ciudad Eterna</p></div></section>
+    <section class="sc sc-escena" data-a="9.6" data-b="14.95"><img class="tx-full sub" data-a="12.6" src="img/t-panteon.jpg" alt=""><div class="tx-over"><p class="tx-small">Última indicación de H. Lambert</p><p class="tx-hand">«Busquen el ojo en el Panteón»</p></div></section>
+    <section class="sc sc-lambert" data-a="15" data-b="26.7"><figure class="tx-photo"><img src="img/t-bernardi.jpg" alt=""><span class="tx-stamp sub" data-a="26.1">Sin rastro</span></figure><div class="tx-id"><p class="tx-small dim">Pero Lambert no trabajaba solo</p><p class="tx-name sub" data-a="20.1">P. Luca Bernardi</p><p class="tx-small sub" data-a="22.2">58 años · Archivero</p><p class="tx-small dim sub" data-a="22.2">Una biblioteca que no figura en ningún mapa</p></div></section>
+    <section class="sc sc-escena" data-a="26.75" data-b="35.5"><img class="tx-full" src="img/t-habitacion.jpg" alt=""><div class="tx-over"><p class="tx-mid">Sin respuesta desde hace <b>48 horas</b></p><p class="tx-mid gold sub" data-a="32">No encontraron lo que buscaban</p></div></section>
+    <section class="sc sc-pyr" data-a="35.6" data-b="48"><svg class="tx-pyr" viewBox="0 0 400 380"><polygon class="d" points="200,18 392,352 8,356"/><path class="d" d="M104 187H300M56 270H346M200 18V354"/><polygon class="tri" points="200,54 238,118 162,118"/><g class="eye"><path d="M170 104 Q200 78 230 104 Q200 126 170 104Z" fill="#efe3cf"/><circle cx="200" cy="103" r="10" fill="#0d0507"/></g></svg><div class="tx-pyrtext"><p class="tx-mid">1785 · Illuminati prohibidos</p><p class="tx-small sub" data-a="39.5">Uno de ellos huyó a Roma con parte de los archivos de la orden</p><p class="tx-mid gold sub" data-a="45.4">Escondidos a la vista de todos</p></div></section>
+    <section class="sc sc-lambert" data-a="48.1" data-b="56"><figure class="tx-photo"><img src="img/t-vitale.jpg" alt=""></figure><div class="tx-id"><p class="tx-name">Marco Vitale</p><p class="tx-small">Jefe de estación del Directorio · Roma</p><p class="tx-small dim sub" data-a="53.5">22 años con nosotros</p></div></section>
+    <section class="sc sc-frag" data-a="56.05" data-b="59.55"><p class="tx-mid">Encuentren el segundo fragmento antes que ellos</p><ol class="tx-frags"><li class="lit"><b>I</b><span class="sub" data-a="56.3">París</span></li><li class="lit"><b>II</b><span class="sub" data-a="57">Roma</span></li><li><b>III</b><span class="sub blk" data-a="57.4"></span></li><li><b>IV</b><span class="sub blk" data-a="57.7"></span></li><li><b>V</b><span class="sub blk" data-a="58"></span></li></ol></section>
+    <section class="sc sc-trust" data-a="59.6" data-b="64.8"><p class="tx-mid">Y si encuentran al padre Bernardi…</p><p class="tx-big sub" data-a="62.4">¿De qué lado está?</p></section>
+    <section class="sc sc-end" data-a="64.85" data-b="999"><p class="tx-mid">Directorio, fuera. Este mensaje se autodestruirá en</p><p class="tx-count" id="txCount">5</p></section>
+  </div>
+  <div class="tx-fuse" aria-hidden="true"><i id="txFuse"></i></div>
+  <button type="button" class="tx-skip" id="txSkip">Saltar transmisión</button>
+</div>
+<script type="module">const MISION = [{"id":"suelo","title":"El ojo del Panteón","kicker":"Objetivo 1 de 4","prompt":"Bajo el óculo del Panteón, alguien numeró con tiza varias losas del suelo. Descifren el mensaje y reporten <b>adónde debe ir el equipo</b>.","placeholder":"Lugar","salt":"Nc4UsrXy37DaR7jKzFkIVg==","wraps":[{"iv":"g37M0KOoOzNpFxF+","ct":"Dp+EY/AexiJLbRv9uwworFa/+jJDa0s+QAQfbI5vGCYIVGXojqL0UbSaFvMUkrfX"},{"iv":"k4I7kFTUuUApurtR","ct":"gMs/BT5nLXJQoeIuW/RXK5lzMtMFG+P9+MAzNtFfXIAYYcmT2bIRJjNzSVdc13Zq"},{"iv":"Qp0j6cY01fqd8aBV","ct":"Yum+NdMRsxk+0Jt1ZuqWsNul7iO7b7WXR+V929ECtrkrV59luBC9kVSVrdn3larI"},{"iv":"/Uh0mUPeqa3k1qFu","ct":"vOQTZOobru0WaDFBTwlCjO6txjNB5MPBlFi0chhpZdhIsGg3NawibUm3fy07B5hN"},{"iv":"xTw/QcHdoRgayebT","ct":"lOw/A+sIwggcPX82+A/EUViMPSgkjH/pcqOfC5NE4+5OmKv/LMv/i0sQ3DS1KHH5"},{"iv":"X6IXWrLY4X2JkyA5","ct":"tOjxm2jPv3h5K3qgK4R85ZK85Rv5iDR+ROh9i7SLcG4JRnl945By0WwOSYXg2rRf"},{"iv":"z+tawYMVGXNUJhr2","ct":"yGjkEO30sLpsSOFe363u9NkzOMAgVwXjvpeS4Pw+sydp/8pg+gwPhknTyzack7We"},{"iv":"L7EardVcmMQmbW0a","ct":"ZDyR/+ffcYFozvRsDRr5V4dgLsuLmSXbzQs3yOQYo3fZcnBcDXAHM2aRYsaSzIZx"},{"iv":"0C/ewvrNPnXY2/93","ct":"n7I1+hvzv2Mz5Fcm4eve7vma/ZWjN6WM1VOOPVFZq15cG/z6NsWe4WU0GhVZ3q/6"},{"iv":"rJHwgajjWwMF0SIy","ct":"tv3a0cX07ksZoP7b8JxJWVv1LqncNnlf7/daSxuGdfQNtn+tDhYaNLuOerWUsfm8"},{"iv":"w+f5GTltSkXDKST4","ct":"kI1t1zyi899IWPNFH8HnRbzMrfEOffo1w1qKEfk4gxpuhoMlVzQF+5CbrWUZabQL"}],"reward":{"iv":"lAhTeZZmKz2abxAR","ct":"f6z62T6Ujbkq7lx6iQlwSmpCsn3nuWi9NOe7HBYN8qjG9JwaCMMp4x0xHXBkotPiIwCrUbEMsgxLUiH7d8hx4XTw+wM2RY1IRo2NDDfvjKUnTk8J7oQ2EMlK3srET5qzkFmYahRLtW0XmDFYNHrG5NoFNozfN1WL/6ula3FQB7A4PNy8WCu6RbxyUHNIyKmBXzS7JUyqFsd+eGyI8kGw2Nrcje2y2hPJnAxOIxndMk7e2VCRNiTgdDghtWsFn7YVqS3gfP/2zaKtBhQv/05yzEezsOXRO3IX/Vux970/09Y9Jvhia2JIeGdMFs1CgtX26+GYAy8yQ+nQhC5CMl7SfsfQvo5IjYJ6AKz6jdJ8AjNc43nNeTXAOH1KLCFYTxxqLydRk5Nk+2jnPIYB31rvRHfGrElQDBQNbQsOtgnNaIFfO+6mFBQkZkjeRIS4u5Qcuh1iMYLd7hvQWZ2xJuI1U1UXuDnTf+ELCQomdnvdh6EyA3blSTbyhax7T/5jjSQpS+jD6Mt11uaQM4PPl5rzlhL6lKTUfoHquj6DcjNJ0UUC+wgI433yinq84bmm9cZmt158o53kuTZFhpdGX4JbkIDxyNrHtompg2t//kOPl4+1QAhYw5JapT+lm8KKjUPzOljxAkJcAjUpokf2EgLd3FqDaNqP3BJ7vR/DfU14i8vOxlN/WL0UfvxYiEXZtN7NaWF5iIGnWzpcv6ZFD9WSIR6RJ1xI1WJR/GhRNode3LcJyGhpS/2vrEqxM0KMkMn0CBkxg9Nh4tMjBPweOSQRUqe8rOC4N9ZmKRsvzYPeHzQV5IbN6vyaOmHee/UqFtjC69Tjp4e2UPLw6KHXzbWueUmcNSUc0niJrV7Z4uFVmHU4kX2Y2J4YH/XcfhkweiiWOweb5P4mMS36ClLXbHau6/2VcSExjyJf183NP0xCy6ReLwysinnvNTjlpIOzkirfb1glmQ8Qw2sMbo4eqWr1bxqoI41kasGXjhLsS/X4zNMzyTv4ALfZvVq+oWNpNK9JguygqcMbvlECzTy6QnRt/Wpt1U2qd1jIrRvvWCc="},"hints":[{"iv":"nKL1uR314S02400S","ct":"FJ7OdC/j2Zvnrc0XlL8jb9rPhvpoJMl8nxd4y9eLJ4nF4Hq3JspiVaBYswWu8+XZYIChmkMoPPodtrua3E+tMIUs6f76gEGHm6GQX0EOeHR7QaHkSs77pKuRIovFBnro/Wf3x1gHqFoMlnZV2jV0pSUwKWRtBC5Us6MJUa2Qhj3ckJ0NWlGBVa7EIK7yx0wA8nxxpZ80NA1ZW+0bBUK0ig=="},{"iv":"bwEYpSkQwWGC2FLw","ct":"/I1Sv1z9zrJG7q1g8Mb82aV3fFbRzlSEVfAceJOPXfnLoVkf17vwMh0AKyj0dV88W6DMHLCHCE25Gu0xq3iW6436ezMauFsaQH7Op+OULN9V9nzVRHUeaYX5l+RpYv+LNEfzv6NfIyJXoX+pkokWvsZNF1/qLyu6aGin2MUTU8QN+NiYSDZko564NpGsKzcnelHd7vtOsFJ2YYXyDm1ctf5zvGDWjIr+wih5mhF3L11XdTXTqC/rROgluEVYnTiBZVjuuB6JDEzMbaG3+0Ymo8bY7fb/z4+GV7629pWcytxAixXTWPnxTCZqeUJxNvhRRAxlTo1r7Q=="},{"iv":"sCz922UBSUzVDc9W","ct":"ucnFzAYXW+I4sronuiDDAZgq9Q3YKUQuTRWo3prpFaF96dxOOnZkZfba4Ut1cGUjDauArUaEUO2kSE6mORHsZiUFwGi4giIfaPkYenexDES/nAeAEVP2slO3ZdqcA2Txt1wh23K8cbkfypBkfKNC8fPkmNbfgW73S0KHsIghCVSrxJwWHHLlYXg2oQ=="}]},{"id":"cartas","title":"Tres cartas, una verdad","kicker":"Objetivo 2 de 4","prompt":"Dos de las tres cartas son falsificaciones. Encuentren la auténtica y reporten <b>el lugar al que envía</b>.","placeholder":"Lugar","salt":"h5zvejbiuGBk0IdVzt5Iog==","wraps":[{"iv":"knvAT3lISH1y5ibz","ct":"z6OzGpl+XnnFGPhgTxXMPw6ziOmvziqzbS56hWUjsQZKBg7kXegPfQ4ChI9t6G5u"},{"iv":"ta92ur0GTXD7Tz6J","ct":"vKsBDx1DCr1dDwWb8/gnat5IKDqhy6dOXSJfcXi7LJbwao8WHgfJs1S7bN9uDkMU"},{"iv":"ZUfyYUyzQovj4Ok+","ct":"/Xxah97+dubrlNxbo323CA7tapdPz90bH15AGqQe2xtfJF57OgouKWbDsgJJNYKr"},{"iv":"ZboN/W6LhD4Lx4do","ct":"4f6v/9qvGSqriCNCNBZpIIZayf6ywI2vZoa6GzdJcj1F88bwIriAHfyaApV+RwS0"},{"iv":"5AMiyBLoNT9pGzkA","ct":"AUzwmGttlncc3mSn7EpkWf9E8DSn5pDnSdhlkhNl+LxxGsveYBnFSk9b0Zy2xsA6"},{"iv":"MBbY5/7kXigyY5Uk","ct":"7AqTaa6Zj85fLR/mANhJaAPumq/6XqH3ve+QpicZPLz20yBvEY0E9IowmxyTDBit"},{"iv":"EGpIGwgzUhqrCCx8","ct":"BRioilBVcScYGm3JCFGCYRLtVZSg5JLYJB4DUsV9nCo8UIxPdkjnVoJY/P4oUvJx"},{"iv":"ppKQUEkrQud+8PsT","ct":"U5RVgx+T5vrhI4FZXBX5WxIUiglAhaCKHJd3wLxZMjpXu5UJvhJdAZ18BwVzXWBz"},{"iv":"rMqVzLVOdTipkxLy","ct":"Ho88xrLCSI73Zv0MUk7bW5/+tXziYx6EBzYJ8HBy6jr6uY2TU1RdgSmzWO1yVRCo"},{"iv":"gzuF2SsyCz6VChaK","ct":"a66KYmhNEV6y0fTb57e4xISQfRGY9Vom7zh3FZe1J5nxZpgIQ3i76dQ6iCeNJZjI"},{"iv":"B72rQVpqNbJR8VY2","ct":"rJM1ZsZ42O6FZOtbbO7lzz0/x1myHuY4l7HHwhkfonur9lkELErJ/m8lduKHQxcf"},{"iv":"+WQGs+FsovPhEyAy","ct":"IEvcsnEfa5q3LbZAOEPylThi/YI3MeQrKOB/KcktsJanq30U89RI7xMMasqARq7r"},{"iv":"9agpcX/IGHo1MKM6","ct":"bp+hCDRzC+2a/5if9mIsulFb6tBe3iXelXONFZLuw8T9fomdUyGlcdyHpjZkSDi0"},{"iv":"kHXf4CbBXCGbeuPm","ct":"mEVwv5ggx6OXYMequFgpAL6g+c21c8CJscbtXeFSiC/3Mv646hOYkTzX1BdZt8U8"},{"iv":"UXCg0cilILmvSQvZ","ct":"dmBX3/E4j87n/QOei8QWof9ZNyHzH07AK+MhAPyJFEElibBjTkU++5/BjDc+DXf6"},{"iv":"5zLgVxs8FkghSTzT","ct":"ZKfsKIVclRXettqdnLsiNUosoVY6r5YchpC5socxihGdzTrQGdildesBmzi8ayW3"},{"iv":"+/TeNBx29iKI/ITg","ct":"lvcECpaO8zPaPJk/sNw7KKGwFmxzwtIhfNru6qA7jXo0RwJNc7oZWl9Qj1wD+ilp"},{"iv":"ATQGeE6FTLxa2Qr5","ct":"ICX6gljvKZCWgBMYCGF1mnwdIo/FiATe7hai4VyAOXnh30bS/y3nTUgo1+km6Ca3"},{"iv":"kPJKElFoTzRMEIEw","ct":"T/Q0349eNT8TSZ0COPM372U6Y2djaWusIjL2DRGqZ0dXpimXfkeyFtFXUqxM+QrV"},{"iv":"JnIZNuo2iig4Ylcc","ct":"L34RAkjuoFjBV5otAt7eyEYSd7zSuWud11EKqt0Q/ANo3sRU7HAWpB5oN28iZTS8"},{"iv":"nzqsMlBKRVZdeTRG","ct":"JxSEcpq0OhhP3fXlgyQCNbBd96utj7BSpXaMtGVwDBGIw3diUz8ca3HJUQVjqOcP"}],"reward":{"iv":"eDQ1yPmsE5g1zvl4","ct":"5/9XDfTL4AHUnaGrXMP5jGSGDyhFTrWPXMHGMpthk+F7t+HIhPW+5iWp3ND814wnOeCXEKm2ZAlCaU7XkCZPazYPFblVwrDesaq7XF3RmlAN3tXOGkxpKzyJWJXGK09pHXSZMro7zbN71ruo1yQNTghF387zxqgtMVwscaduKiTwq1AyTIoijk3x9ZuBotm5dsDc6c/I0yRVW46s1Me7rUFoorA0LlUaXpHXouCvYTE37BMo1+RSqH0mF3oCPHovOCtLSgBnSZkj+nLn7uRXfyDJbMn8x217Vvkzu8z8Gr1I7xwiVGjeC2LrSHSTQ3yxhAaKKUqpJ67vpMX/Wqu4rs0RUeEHjmxWxUH28ZRFSKcUSEUu1UzfaIUArvkYEFZtxCK3P4MfJOwaBS4u7QEjVGUxq2VSniNLuDjaxR5v+S9dlolVVpXyzWmySUZ0JlD2/y557caClRFpnjIDZbFS/l/PHfVG3RmBq1TsAu3JwZzi8CECW8QUX2Hd2prbCRee7nXOMevF5ACFBcbzVd/vl/VK7lLvaeB9FqdNyoBrUnNyBVJ3e+U6sDHnguWFXv6fLtAHaQANNhZQ4+ZwMDpcg/6+pcWHAVN7nNTTeUPBNXffPE/58C0Il+LhlBBh7VD5+3UBFr3Hqw+gDpLCVhRIAe1x6g7pSM0WwTyWVhhoYbZNX48+Ac1oWP0+dwksjeJfLln7ExfyjKs0xLRi5PK5tH7A3FC402rFLGO1565EzOvpb92MNZpn0q6AVa5VPNCDHkDAhs5uvxOc7qMefW2KLLgrz/tqQXaVaKrgKm1uM2bOLe0fJcNIk94="},"hints":[{"iv":"XYhuxBBOgiGVG2Td","ct":"Occ7VGISlG3/oKZBhAh59cQt5BvYnFTsWEBFxp5siDv3NmzBfBaMlxwdMkAt4Y265wrCjywB3dmlHeaEaWylxqoWt7YVZDAUNnPLk/F6H5asmOoHXLRpOg0hzS7RkRH3LZf0d+lTpV2sZ/KTraLgfmDT9nOr3iJjbtdQqmnDBO7R5ZkWSt7fK6QSXxHgD8dIznyUNZPYWLSv6l6e6sZTk7b3UQvwIwRIaP6H7fMANuxQIqRS644GwrCpQdxmi7JiG8n1b4kJC5OYF30oSV4h2CGShA=="},{"iv":"ElqB1S76kv1zNytR","ct":"rUEHnZ+/H3ps60lXWU/1Pk0r17lzRKRyJ3Upx1MbQ91lu6eeInL6J0G6LNGz0NQkzE/EStE5bYuIyuPNFqb4xDGoRI7aEviioTkmN7x4rCnogJHWgO+Ak1ZqBeSIM+gOdU+uA5zZECnz2WkvvVeOjyQqfYsR1gPyLc2cnBXrucwMJbTquUrc4ijntjWBOQ+AYJEwFZpneSy63B+leQJPWjiAHNg7SAEq2oaGWuE3iB0Z+fwLQuRNjuFMr7EPZU+0ws9jIfo6Bx4="},{"iv":"jC0tLuQqiY5ml54H","ct":"ymHsSS8IdeI3lczfKDps9GaV95Fj2hI2wp+d6zXjmSlF6kCnhWw6HJae5xZ5TlgHe6x/Szu166Uiv0ikAGa5V54+JCX6zqoL/uikT1gu0yy0cHnhBWXrFdvUcS0ORt8lxn/y/K/nn8ORcEIEszNMEhdq09d2QIF8AIFU2InTuHpsMlaUavxxVNnWEEsLxWmgcNDc5x93bFJpPMkxKK2p9rO7pSIW5qE471seWkWC7+zZkZdTpqFl"}]},{"id":"disco","title":"El disco de Alberti","kicker":"Objetivo 3 de 4","prompt":"Usen lo que hay en el SOBRE C para leer la placa de la cerradura. Reporten <b>a quién deben buscar</b>.","placeholder":"Nombre","salt":"uYf4q/tGsA08DxUiYYB3AQ==","wraps":[{"iv":"tDnydaIdFz8pGC3A","ct":"h27nC4CrPtNtghfsIFxFfFz30jGC/CJmgyd2j+zqA8WOwK5OexlyHRK0Z8G65CTh"},{"iv":"vKZxGrxeZQbSMtiY","ct":"gC57NAnvUOEAsvCEd0jOHMu8mw2MU3iyTG8e04xwIvocoauLqxidginJAYFd1FHt"},{"iv":"pHNt6NiiS7gObFdJ","ct":"mEYmljcAzAesat5x4GVWVTSMxm1Uxvoi9LCkB8OsHNW9shQl78+bC5NiNVHCUnKR"},{"iv":"IdgKksHBzENgwwyB","ct":"Gxhh7z6G03fpflBNNGkdzp9ZG/VE/Og+VUXVkqofHHRgq1b5AmdHwfxZqcLrEAr5"},{"iv":"FriixCAK3fBGTiml","ct":"b3vz3stMCcv0k52Q0b5Cjs+lAXsnVY2z0YcInqXUUIC3Y9FFeFU91Ej0wwZl7slZ"},{"iv":"TzHWN23DfOS7xNUd","ct":"oIcWwl5Iv5TWqwddwnpYBIl+s4QdmCyxUwF1VGwgE1tk5qJDzTu1pYpTXBVbkUEd"},{"iv":"3cF+TG1rJP4vG/gQ","ct":"eCCbTEJdwU2TF/VgRqpZwJkgTxIN5tQjyRUV2pgkWtP6I7lmRZvzamlKazZ/X8lU"},{"iv":"U5cJqcEMaa6azhxs","ct":"x1ExU9RnqMHxgywRJwhHMkcvcPaTJJCsJ2eg4mkMZU5ZQZtEiOx4pNTBkykVwYjQ"},{"iv":"mX7A8ThZfDqZtBr0","ct":"oxug4Bqs2BPEsQO72fW0Yg8oDoAiCSLIaiGPWsw0LR7lNjWqxmwiRqDFYpQZfYwC"},{"iv":"4LDVbYxv6ARC613e","ct":"LoU1wVc5Sp0q+hhyRxFAgPeB7Zf4bFH9iHD9yIptad4N3Yr9NmiMR8GjeudsBIbS"},{"iv":"zFCH7rKsb8ODax+E","ct":"2R2cfNOSlU61EQ3asbx38/2by/fPTZUVsu7BDZQVNenCR1KPDL6RhIM+UfTs5ChO"}],"reward":{"iv":"qcQii3Em8fsZ1mCO","ct":"XKbWWCle2/griQfPJ7q35U/3FNJdHpWiCt8MsZQXu4FLOZjPRWWZ6D4D7Fbu9kB5xaOBM/1m3XsNYicmeEgMrkDMqhG48lCVddXO8ZAjUtexS8xotbrXDsMFUTDnNWWi+yu1fllMPg9dYC4WDOO+7BbOIX8r19sA7OuQu6pm0NTRL1Qfhe28FMnq3htiTr/3TlrxfqlLucrCPAPC9nLVMcLM+H74RvVMiAu/6zzC4mNiTlkHIw5WzGnfCSe3aP0JtNi0k/H45wzrwvW4jmT7zxnjax6M8Q3Mf9Co3I4AILXXLs22coY1raVpW+bdhJz0Vc6RBiQA9P3Ga+q+tYEpTvawMS6nrswN2ty6/kijEVIiUpauGNn62Ugj7RZm7/Elkyvq2HRTqWIU58iVRQLFyeqTvyX1D3qvpQS8MykSw/5lK3vUYfQrSSz2JiOQDQ2eKbu8OAYKnAE4BIISGjLj5MhABOsP0PfLFtGXND5MZQAQadglLB1w/1GOE7oj4bVCjCKtTZug2isshiRd1xpb8FdXIEymqDbLJFv4gUWgwM0B7lMRre2vavZyvRl9hLU1y1F5BAz+sM0JwdWSFF0KeeNnePr8NrrQnp2lYYv6obrnW+FU+56R+aSVKLScMQzJw8WJS8q+YyoY6GKzMhbyLf5BkhtihqKdIT3IeDZVlsZaidBIqBIr0SqYJC3fX6OKEnrvKv/obFWElJL9jSjs0RypYUzGLqh1mxpsdgJeR1lyS8R1qsw7Ft0wf94TVkPrSm4jsVg5swZ8GKLPKLSoyUrwseVVFA7Ny+7w9tQoh+ObdBM+0eSy8IEZ1SZdrrR67QYdEGMe+3Jo0PkISfF1Aet9sxdsZ4pOsZZiehoYXwe2j2t+3PDbqyychtNdG++bAVwGexwwGvCGub0zWHZqmXf4TN9Z35woEQ+QwKN+j0VpeB9U1aMyKJaVY1V1waKifXiHAhY/Wqb5748U8zSmNkdXG7zhD9WN+VMnyFgdgs8u8kgxkuhAWHsK79YAAVDkN2nEtAEW4MfwxWKR00Nyljig8LrKsBsf8UKiUhQX0S53zJ5r/LtKGMJ576FNVd0qe5XIFh3EaVhVRt2mkUgWu57NePV4Juq3JVU2VLGl8JDRVdMTl/D2BjzoZ/YEu6pSgRvH49+V6C7UoUoaQn0L"},"hints":[{"iv":"NN1eJJwPAsUosPjR","ct":"SKe/h8RZ8x9U0lqnYZqby3aN29I8Xwgk1LGyEWdSe4BW8VWkKN0OWAcUNc56x8rxKr4l8Z+dOy0x13oA6sR8lLB2RCT/UNTZ7ZhdGOc+IocTxGl4fT04XFRAiWkpO+DGI/Pzrjq13aB4ZTC/1Zf/lIWf55J3VK9w81TeQ0eS8SX2hjFklTFkEMqW2P22nX5CPgUp4MGx7s6gxA=="},{"iv":"CL45v0sHYaF/J/Pl","ct":"0l5GreXWnS/9+HYv2gCPP+/qDPEvInjeG8v/1uJQTtwzxf5shvZuQO9Qd/ukQSa5GcLWC9pNAqko2c/ZHNUKckeny/JUApdeOIMY9cjo77ZqNp+OJijS8Of4KWs16ZE/VVuSE4AYDQSq3MgWA4zZBo+B9yCGMqbVtP3uyvwHZdGX5OHIinvcBVzzaEWRq9reVM+dC3BTmDu0ctJzwkEvA9b4VtfaQdQmoXlMrGRFYqnNEVeWN+ukEJV7Q1ib98KZ2TnbHbetlUaAHd/RI7wcmtNQd2FsSQ=="},{"iv":"5iZhhA4sIqspYB1k","ct":"+azUutIB3G9WxwoTn4HvL6MDBvZmgR8NuG249Wzi50ba+BEpCDM4wPnnSq8zx/NJi8pg9GOq79DCIePTVuurEno2C8bnXNDkQJpML3LQI8IOrCfzWndf1UIqA5qshMdMF5jtzV1IewVXGEi0RrR3P7x0pIvd4CyEKcHzSIYo98C0APiNZjtAq/ntmAzJjVmLssSB9LIt9trgyB91UuItfdW5Q7WrQRE="}]},{"id":"traidor","title":"El amigo en Roma","kicker":"Objetivo 4 de 4","prompt":"Alguien metió las dos cartas falsas en la habitación de Bernardi. Reporten <b>su apellido</b>.","placeholder":"Apellido","salt":"gQzphk4ybdrAoABe3TYVUA==","wraps":[{"iv":"4cOyi0dxwGjWh1Eg","ct":"7TOUhbwwx8+ivy1/vRM4hIkXoqrFuqDJbDOL5nX7H41zkthpWE1QnyKEOOacI4v0"},{"iv":"Xf9ajOgtutc5xv4L","ct":"ulXG0hh9pdqWmkxS65q99JJRvOgQu1RYLh2f1DyMIoJhGF7sXud37P+TkwAftp0F"},{"iv":"QamcuMIyFKYOjhbe","ct":"6yRA7y3NwLIhFhrSBB3CdPXNdfk7I4SH9+Uc098SXnsMIC2qNiwvzQbOv6g3/E9C"},{"iv":"QMjkZ89agbkAOIRZ","ct":"AFm4cU42A5M6y+ElR9W62a11VyIEOUTtxdvkzDEVIgC1UYJ1AaXluPGKk6K7M1r7"}],"reward":{"iv":"zc13ubfsskpUeOHZ","ct":"HDxOFWj6RzYYinaK9Lt4qRhD5mt3xuk3u7h9xNoNj4ndx78nkZADJf7Oliue0FmDqS7jxBPt3QIqZEjkIU2EHs7dzzKuyT6Tqqz1yM4C6Jno1bghrCX0a66zCuIuJ4Ue5qHBVtYwK8g/Msh6Og28n3N6Mu2dRAxmmZeBoiFCwjvlueQkhAPnHjHFT5j1bvQhXex3rHgFPBLnS0TB2DHrnUj/4/TAcnsVHWD4i4++ZN7ew7cDjm5XwLPHasSmf47JwJujRGIDnUxgBO8vm8dQggAfyZAZrtwsmmV3ZMYl9DeP4KEVQScWm2IH3O0duDkB512Sa1suN+3Q1cvEfRW/HpfVkmfr4LLS3lKzLUno3JuTH+7xaJmDod0ixFq8ZDsAjPBiYcBLuOu14x/EOeGVwkgbzB3yCtJ6KhvxhOp3b7KMZeqFxjgyL3nYRMKLTFQSb80HZle5YmQYg+qDT8WFSTFbqFHQ1EJXFf+HQG0Xq7rIxF7hQ2sV5Xrts3jluXdMnEa5Dc2tEgmsdcDs6aETq8OxKVhHc4pqi4ukvNlLJJ1RKxPHgl7ve0uqUL+0cZuuUB2tmW0FGLnGd8vuOHNvmgNSJ8AKoMKYIbVEt3QDFmpuyFBQpaow+v/r1/60QAEnrDuw27MX+MF7z0KjgCKHUK5b4dZ65kro29lZm9xzloOg7J7hZtpbuHiFiHjVUo7pqPLTxqIx+BBmFwSLEG7zcoezyFVHSkKVfuMzswIBKdhud4s5sU2s39uJzjMdxSEEhfIe1HfGCz6p3/spJCOSbfWyguNrPXNQaTP8vfai0DwlgURWVxBWTlwGV6okzV+0aAfYulQ1nVdzDPyy0iIK0FaO42PPj9WbjIpQlQWc+VhSLA33Z7OPuqo3bFC+FnDRII1VzJrlG+L2Dwvvx9p0UXDb9eUMkYCGUVi01zItpYQyZKDE29g+2z6BPzGQhOpvfZBp4vXH8Vp4+6bIW78Aii1l6zllCt/otJ+RlIBT4OsfguLdUklMnBfC+Wd8kcrlg+Qag6jVCs9y1hWnYt7B+EYgSHhhh7BzzFG2GBh7bYiNKyIo6OWJccP9266AGeFxdL9+jHpdzXJMXwzsA2JlWf3jzpfMdVctHneaCw6i7TFoX5vyzfhzOChkB20bJVqf9Kfz1QdnceTAfZO4W1ur0wOA"},"hints":[{"iv":"Su6Zmld8jDoYEOoR","ct":"KieHAKI98+A8KLiOMe8mpkAypxmbT6rkEHB6fELiJVAxTjDPlck/ilOtPUKk5c3rC4YYqmtKQsvH4pt8SkkDSExlqytHpOlGpcUkKtFSvDYygQY1BOq4xCXzdD+wSizCy5FvkjfKUNZ66X4pl2bR9ixm2cvwnKp6Fo7AuUMO393mwbQ="},{"iv":"xNGuXpA/FHQw1Mbq","ct":"OuwOlXRw2j/sEo3bWe4xtbJASOQdb15VQ6cw84a+2Wl3JYXgiVosLx/ZpfdXFAJxzvOTLna71wOHYFqRvkAR61hW7z6N0/dNFzw0huzj3pGDB+3v6ZoOEWMl3vlu3MIJMYqrd1DSN+QzLFrbQnyofjLfNm4sU7YJrtNIHLzH09m/07lHOrI//rv6CpQ0orQrkDrDgVkmVtanRmZoWJ8qoCP6erqEs5YZFQaIRxOlpSwtP9ahuq4TWsgR"},{"iv":"q1lNj3NutQLuGWEK","ct":"TVbbPsrZEBCCnO6JElnRrvURwdZk/E6RYvFX/70PTatb1+lPoe6k43pPitgLYO4xugonc0qlwSc3i/B3h53NcjgLaNKxa75p6syV7eGwn7SHeK7F6qxBc6TYI8LKzyEXCAtVctVfoVv+n5qDXWgq/5QxIdOGPP54JA7dlo5ZF6niaictVj352YnOjw/sguCM9Anoj++U5VUtfN7TTqQyTBQ8+AcnuhM67wOhxXWOCA=="}]}];
+const LIMIT_MIN = 120, ERR_MIN = 3, HINT_MIN = 5, ERR_EXPO = 10, HINT_EXPO = 5;
+const AUDIOS = { briefing: null, interceptacion: null, cierre: null }; // se rellenan si existen audio/<clave>.mp3
+const TTS = {
+  briefing: "Transmisión cifrada del Directorio. Misión dos. Agentes, bienvenidos a Roma. Lambert les dejó una última indicación: busquen el ojo en el Panteón. Pero Lambert no trabajaba solo. En sus cartas aparece el padre Luca Bernardi, archivero de una biblioteca que no figura en ningún mapa. Hace dos días dejó de responder. Nuestro jefe de estación en Roma, Marco Vitale, les dará todo el apoyo que necesiten. Encuentren el segundo fragmento. Y si encuentran al padre Bernardi, averigüen de qué lado está. Directorio, fuera.",
+  interceptacion: "Interceptación. Frecuencia vaticana, canal no autorizado. El sacerdote sigue vivo. Y los agentes del Directorio ya saben dónde buscar. No se preocupen. Nuestro amigo en Roma ya les preparó una bienvenida. Fin de la transmisión.",
+  cierre: "Dos de cinco, agentes. Lo están haciendo mejor de lo que cualquiera esperaba. Demasiado bien, quizás. Ellos ya saben sus nombres. El siguiente rastro apunta al este, donde Europa termina y empieza Asia. Prepárense para Estambul. Directorio, fuera."
+};
+const $ = s => document.querySelector(s);
+const enc = new TextEncoder(), dec = new TextDecoder();
+const ub = b => Uint8Array.from(atob(b), c => c.charCodeAt(0));
+const norm = t => t.normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+async function kdf(ans, salt){
+  const base = await crypto.subtle.importKey('raw', enc.encode(norm(ans)), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt:ub(salt), iterations:120000, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, false, ['decrypt']);
+}
+const aesDec = (key, box) => crypto.subtle.decrypt({name:'AES-GCM', iv:ub(box.iv)}, key, ub(box.ct));
+async function tryAnswer(p, ans){
+  const k = await kdf(ans, p.salt);
+  for (const w of p.wraps){
+    try {
+      const raw = await aesDec(k, w);
+      const K = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['decrypt']);
+      return JSON.parse(dec.decode(await aesDec(K, p.reward)));
+    } catch(e) {}
+  }
+  return null;
+}
+async function getHint(p, i){ return dec.decode(await aesDec(await kdf('PISTA'+p.id+i, p.salt), p.hints[i])); }
+
+const fresh = () => ({ started:false, activeMs:0, runningSince:null, penaltyMin:0, exposure:0, errors:0, hints:{}, solved:{}, finishedAt:null, finalMs:null });
+let S = fresh(), docRef = null, ready = false, rewards = {}, hintText = {}, busy = false;
+const LS_OP = 'exp1776-operacion'; let LS = 'exp1776-roma';
+
+function elapsedMs(){ return S.activeMs + (S.runningSince ? Date.now() - S.runningSince : 0); }
+function remainingMs(){ return LIMIT_MIN*60000 - (S.finalMs ?? elapsedMs()) - S.penaltyMin*60000; }
+function fmt(ms){ const neg = ms < 0; ms = Math.abs(ms); const h = Math.floor(ms/3.6e6), m = Math.floor(ms%3.6e6/6e4), s = Math.floor(ms%6e4/1e3); return (neg?'−':'') + h + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0'); }
+
+async function save(){
+  try { localStorage.setItem(LS, JSON.stringify(S)); } catch(e) {}
+  if (docRef){ try { await FB.setDoc(docRef, JSON.parse(JSON.stringify(S))); $('#sync').textContent = 'Operación ' + OP + ' · avance guardado en el archivo de la agencia.'; } catch(e){ $('#sync').textContent = 'No se pudo guardar en el archivo. El avance queda en este dispositivo.'; } }
+}
+
+function tick(){
+  const r = remainingMs();
+  const c = $('#clock'); c.textContent = fmt(r); c.classList.toggle('low', r < 15*60000);
+  $('#expoN').textContent = S.exposure + '%'; $('#expoBar').style.width = Math.min(100,S.exposure) + '%';
+  $('#expo').classList.toggle('hot', S.exposure >= 70);
+}
+setInterval(tick, 1000);
+
+// ---------- audio ----------
+let tts = null, player = null;
+function audioWidget(el, key){
+  el.innerHTML = '';
+  const b = document.createElement('button'); b.className = 'btn-sm'; b.type = 'button';
+  b.textContent = '▶ Escuchar transmisión';
+  const note = document.createElement('span');
+  b.onclick = () => playAudio(key, b, note);
+  if (!AUDIOS[key] && !('speechSynthesis' in window)){ return; }
+  el.append(b, note);
+}
+function playAudio(key, b, note){
+  if (player){ player.pause(); player = null; }
+  if (AUDIOS[key]){
+    player = new Audio(AUDIOS[key]); player.play().catch(()=>{ note.textContent = 'No se pudo reproducir el audio.'; });
+    if (key === 'briefing' && window.Transmision) Transmision.start(player);
+    return;
+  }
+  if ('speechSynthesis' in window){ speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(TTS[key]); u.lang = 'es-ES'; u.rate = .92; u.pitch = .8; note.textContent = 'Voz provisional de la agencia'; speechSynthesis.speak(u); if (key === 'briefing' && window.Transmision) Transmision.start(null); }
+}
+
+// ---------- render ----------
+function render(){
+  tick();
+  $('#pauseBtn').hidden = !S.started || !!S.finishedAt;
+  $('#pauseBtn').textContent = 'Pausar';
+  $('#pausedLayer').hidden = !(S.started && !S.finishedAt && !S.runningSince);
+  $('#briefing').hidden = S.started;
+  $('#startBtn').disabled = !ready; $('#startBtn').textContent = ready ? 'Iniciar misión' : 'Conectando…';
+  const m = $('#mission'); m.hidden = !S.started;
+  if (S.started) renderMission(m);
+  const f = $('#final'); f.hidden = !S.finishedAt;
+  if (S.finishedAt) renderFinal(f);
+  document.querySelectorAll('[data-audio]').forEach(el => audioWidget(el, el.dataset.audio));
+}
+
+function renderMission(m){
+  const keepVal = document.querySelector('#mission form.answer input')?.value || '';
+  m.innerHTML = '';
+  const alerts = [];
+  if (remainingMs() <= 0) alerts.push('La ventana de extracción se cerró. La misión continúa, pero la calificación máxima ahora es C.');
+  if (S.exposure >= 100) alerts.push('Exposición total: el enemigo sabe que están en Roma. La misión continúa, pero Estambul empezará con 10 minutos menos.');
+  alerts.forEach(t => { const a = document.createElement('div'); a.className = 'alert'; a.textContent = t; m.append(a); });
+  let currentFound = false;
+  for (const p of MISION){
+    const card = document.createElement('article'); card.className = 'card obj';
+    const solved = S.solved[p.id] && rewards[p.id];
+    if (solved){
+      const r = rewards[p.id]; card.classList.add('done');
+      card.innerHTML = `<div class="kicker">${p.kicker} · Completado</div><h2>${r.title}</h2>${r.img ? `<div class="${r.img.length>1?'rw-pair':''}">${r.img.map(f=>`<figure class="rw-img"><img src="img/${f}.jpg" alt="" loading="lazy"></figure>`).join('')}</div>` : ''}<div class="reward">${r.body.map(x=>`<p>${x}</p>`).join('')}</div>` +
+        (r.audio ? `<div class="audio" data-audio="${r.audio}"></div>` : '') +
+        (r.fragment ? `<div class="kicker">Fragmento recuperado</div><div class="frag">${r.fragment}</div>` : '') +
+        `<div class="order">ORDEN: ${r.action}</div>`;
+    } else if (!currentFound){
+      currentFound = true;
+      const used = S.hints[p.id] || 0;
+      card.innerHTML = `<div class="kicker">${p.kicker} · En curso</div><h2>${p.title}</h2><p style="margin:0;max-width:62ch">${p.prompt}</p>
+        <form class="answer" autocomplete="off"><input id="ans-${p.id}" aria-label="Respuesta" placeholder="${p.placeholder}" autocapitalize="characters" spellcheck="false"><button type="submit">Enviar</button></form>
+        <div class="msg" aria-live="polite"></div>
+        <div class="hints"></div>
+        <div class="row"><button class="btn-sm" type="button" data-hint>${used < 3 ? `Solicitar apoyo ${used+1} de 3 (+${HINT_MIN} min)` : 'Sin más apoyo disponible'}</button></div>`;
+      const hintsEl = card.querySelector('.hints');
+      for (let i=0;i<used;i++){ const h = document.createElement('div'); h.className='hint'; h.innerHTML = `<b>APOYO ${i+1}</b>`; const t = document.createElement('span'); t.textContent = hintText[p.id+i] || '…'; h.append(t); hintsEl.append(h);
+        if (!hintText[p.id+i]) getHint(p,i).then(x => { hintText[p.id+i] = x; t.textContent = x; }); }
+      const hb = card.querySelector('[data-hint]'); hb.disabled = used >= 3;
+      hb.onclick = async () => { if (busy || (S.hints[p.id]||0) >= 3) return; busy = true;
+        S.hints[p.id] = (S.hints[p.id]||0) + 1; S.penaltyMin += HINT_MIN; S.exposure = Math.min(100, S.exposure + HINT_EXPO);
+        await save(); busy = false; render(); };
+      const form = card.querySelector('form'), input = form.querySelector('input'), msg = card.querySelector('.msg');
+      input.value = keepVal;
+      form.onsubmit = async e => { e.preventDefault(); if (busy) return; const v = input.value; if (!norm(v)) return;
+        busy = true; msg.className = 'msg'; msg.textContent = 'Verificando con el Directorio…';
+        const r = await tryAnswer(p, v);
+        if (r){ rewards[p.id] = r; S.solved[p.id] = norm(v); input.value = '';
+          if (r.final){ S.finalMs = elapsedMs(); S.activeMs = S.finalMs; S.runningSince = null; S.finishedAt = Date.now(); }
+          await save(); busy = false; render();
+          setTimeout(()=>document.querySelectorAll('.obj.done')[Object.keys(S.solved).length-1]?.scrollIntoView({behavior:'smooth', block:'start'}), 50);
+        } else {
+          S.errors++; S.penaltyMin += ERR_MIN; S.exposure = Math.min(100, S.exposure + ERR_EXPO);
+          await save(); busy = false; tick();
+          msg.className = 'msg bad'; msg.textContent = `Respuesta rechazada. Penalización: +${ERR_MIN} min y +${ERR_EXPO}% de exposición.`;
+          form.classList.remove('shake'); void form.offsetWidth; form.classList.add('shake');
+        }
+      };
+    } else {
+      card.classList.add('locked');
+      card.innerHTML = `<div class="kicker">${p.kicker} · Bloqueado</div><div class="redact"></div>`;
+    }
+    m.append(card);
+  }
+}
+
+function rank(){
+  const totalHints = Object.values(S.hints).reduce((a,b)=>a+b,0);
+  const inTime = remainingMs() > 0;
+  if (!inTime || S.exposure >= 100) return ['C','Misión cumplida con daños'];
+  if (totalHints === 0 && S.errors <= 1) return ['S','Agentes fantasma'];
+  if (S.exposure < 50) return ['A','Operación limpia'];
+  return ['B','Misión cumplida'];
+}
+function renderFinal(f){
+  const [r, label] = rank();
+  const totalHints = Object.values(S.hints).reduce((a,b)=>a+b,0);
+  f.innerHTML = `<article class="card final"><div class="kicker">Misión 2 completada · Roma</div>
+    <div class="row" style="gap:22px"><div class="rank">${r}</div><div><h2>${label}</h2><div class="sub">Calificación del Directorio</div></div></div>
+    <dl class="res"><dt>Tiempo real</dt><dd>${fmt(S.finalMs)}</dd><dt>Penalizaciones</dt><dd>+${S.penaltyMin} min</dd><dt>Tiempo restante</dt><dd>${fmt(remainingMs())}</dd><dt>Errores</dt><dd>${S.errors}</dd><dt>Apoyos usados</dt><dd>${totalHints} de 12</dd><dt>Exposición</dt><dd>${S.exposure}%</dd></dl>
+    <div class="audio" data-audio="cierre"></div>
+    <p style="margin:0;max-width:62ch">Guarden el expediente de Roma junto al de París. El enemigo ya no está fuera del Directorio. La misión 3, <b>Estambul</b>, se desbloqueará cuando el Directorio la envíe.</p></article>`;
+}
+
+// ---------- controles ----------
+$('#startBtn').onclick = async () => { if (busy) return; busy = true; S.started = true; S.runningSince = Date.now(); await save(); busy = false; render(); };
+$('#pauseBtn').onclick = async () => { if (!S.runningSince) return; S.activeMs = elapsedMs(); S.runningSince = null; await save(); render(); };
+$('#resumeBtn').onclick = async () => { S.runningSince = Date.now(); await save(); render(); };
+$('#resetBtn').onclick = () => { $('#resetConfirm').hidden = false; $('#resetBtn').hidden = true; };
+$('#resetNo').onclick = () => { $('#resetConfirm').hidden = true; $('#resetBtn').hidden = false; };
+$('#resetYes').onclick = async () => { S = fresh(); rewards = {}; hintText = {}; await save(); $('#resetNo').onclick(); render(); };
+
+async function restoreRewards(){
+  for (const p of MISION){ if (S.solved[p.id] && !rewards[p.id]){ const r = await tryAnswer(p, S.solved[p.id]); if (r) rewards[p.id] = r; } }
+}
+async function applyRemote(data){
+  if (!data) return;
+  if (JSON.stringify(data) === JSON.stringify(S)) return;
+  S = Object.assign(fresh(), data); await restoreRewards(); render();
+}
+
+
+// ---------- Firebase ----------
+import { initializeApp, getAuth, signInAnonymously, getFirestore, doc, setDoc, onSnapshot } from '../firebase.js';
+const firebaseConfig = {
+  apiKey: "AIzaSyDCeN7M2gPZynYc1m91m4lTYwxqi5qHo2I",
+  authDomain: "expediente1776.firebaseapp.com",
+  projectId: "expediente1776",
+  storageBucket: "expediente1776.firebasestorage.app",
+  messagingSenderId: "325760009900",
+  appId: "1:325760009900:web:0d5949b7b11fefd7ea0109"
+};
+const FB = { setDoc };
+let OP = null, unsub = null;
+
+async function detectAudios(){
+  for (const k of Object.keys(AUDIOS)){
+    try { const r = await fetch('audio/m2-' + k + '.mp3', {method:'HEAD'}); if (r.ok) AUDIOS[k] = 'audio/m2-' + k + '.mp3'; } catch(e) {}
+  }
+  render();
+}
+
+function showOpGate(show){
+  $('#opGate').hidden = !show;
+  $('#startBtn').hidden = show;
+  $('#opInfo').hidden = show;
+  if (OP) $('#opName').textContent = OP;
+}
+
+async function connect(op){
+  OP = op; try { localStorage.setItem(LS_OP, op); } catch(e) {}
+  LS = 'exp1776-roma-' + op;
+  S = fresh(); rewards = {}; hintText = {};
+  try { const l = JSON.parse(localStorage.getItem(LS)); if (l) S = Object.assign(fresh(), l); } catch(e) {}
+  await restoreRewards(); ready = false; showOpGate(false); render();
+  $('#sync').textContent = 'Conectando con el archivo de la agencia…';
+  if (unsub) { unsub(); unsub = null; }
+  const timer = setTimeout(() => { ready = true; $('#sync').textContent = 'Sin conexión con el archivo. El avance se guarda en este dispositivo.'; render(); }, 10000);
+  try {
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app); await signInAnonymously(auth);
+    const db = getFirestore(app);
+    docRef = doc(db, 'partidas', 'roma-' + op);
+    unsub = onSnapshot(docRef, async snap => {
+      clearTimeout(timer);
+      if (snap.exists()) await applyRemote(snap.data());
+      else if (S.started) await save();
+      if (!ready){ ready = true; render(); }
+      $('#sync').textContent = 'Operación ' + OP + ' · sincronizada entre sus dispositivos.';
+    }, err => { clearTimeout(timer); docRef = null; ready = true; $('#sync').textContent = 'El archivo rechazó la conexión (' + err.code + '). El avance se guarda en este dispositivo.'; render(); });
+  } catch(e){ clearTimeout(timer); docRef = null; ready = true; $('#sync').textContent = 'No se pudo conectar con el archivo. El avance se guarda en este dispositivo.'; render(); }
+}
+
+$('#opForm').onsubmit = e => { e.preventDefault(); const v = norm($('#opInput').value); if (v.length < 4){ $('#opMsg').textContent = 'Usen al menos 4 letras o números.'; return; } connect(v); };
+$('#opChange').onclick = () => { if (S.started && !confirmChange){ confirmChange = true; $('#opChange').textContent = 'Toca otra vez para cambiar'; return; } confirmChange = false; $('#opChange').textContent = 'Cambiar'; try { localStorage.removeItem(LS_OP); } catch(e) {} if (unsub) unsub(); docRef = null; OP = null; S = fresh(); rewards = {}; render(); showOpGate(true); };
+let confirmChange = false;
+
+(function boot(){
+  render(); detectAudios();
+  let saved = null; try { saved = localStorage.getItem(LS_OP); } catch(e) {}
+  if (saved) connect(saved); else { showOpGate(true); $('#sync').textContent = 'Elijan un código de operación para empezar.'; }
+})();
+</script><script>
+(function(){var b=document.getElementById('briefing'),t=document.getElementById('ticket'),i=document.getElementById('opInfo'),
+st=document.getElementById('stepTx'),pr=document.getElementById('protocolo'),lb=document.getElementById('ctaTxLabel'),cta=document.getElementById('ctaTx'),nm=document.getElementById('opName');
+function key(){return 'exp1776-tx-roma-'+(nm.textContent||'');}
+function seen(){try{return localStorage.getItem(key())==='1';}catch(e){return false;}}
+var wasShown=!pr.hidden;
+function s(){var conn=!i.hidden,started=b.hidden,w=conn&&seen();
+ t.hidden=started;t.classList.toggle('ok',conn);
+ st.hidden=started||!conn;
+ lb.textContent=w?'Ver transmisión de nuevo':'Iniciar transmisión';cta.classList.toggle('again',w);
+ pr.hidden=!w;
+ if(w&&!wasShown){pr.classList.add('reveal');}
+ wasShown=w;}
+document.addEventListener('tx:closed',function(){if(!i.hidden){try{localStorage.setItem(key(),'1');}catch(e){}}var first=pr.hidden;s();if(first&&!pr.hidden){setTimeout(function(){pr.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});},650);}});
+[b,i].forEach(function(n){new MutationObserver(s).observe(n,{attributes:true});});new MutationObserver(s).observe(nm,{childList:true,characterData:true,subtree:true});s();})();
+(function(){var c=document.getElementById('clock'),p=document.getElementById('fusePath'),s=document.getElementById('spark');if(!c||!p)return;
+var L=p.getTotalLength(),first=true;
+function frac(){var t=c.textContent.trim(),neg=t.charAt(0)==='−';t=t.replace('−','');var a=t.split(':').map(Number);if(a.length<3||a.some(isNaN))return 1;var sec=a[0]*3600+a[1]*60+a[2];if(neg)return 0;return Math.max(0,Math.min(1,sec/7200));}
+function draw(f){var len=Math.max(0.001,f*L);p.style.strokeDasharray=len+' '+L;var pt=p.getPointAtLength(len);s.setAttribute('transform','translate('+pt.x+' '+pt.y+')');s.style.opacity=f>0?1:0;}
+function upd(){var f=frac();if(first&&!matchMedia('(prefers-reduced-motion: reduce)').matches){first=false;var t0=performance.now();(function step(t){var k=Math.min(1,(t-t0)/1600),e=1-Math.pow(1-k,4);draw(f*e);if(k<1)requestAnimationFrame(step);})(t0);}else{first=false;draw(f);}}
+new MutationObserver(upd).observe(c,{childList:true,characterData:true,subtree:true});upd();})();
+(function(){
+var END=66.3, tx=document.getElementById('tx'); if(!tx) return;
+var scenes=[].slice.call(tx.querySelectorAll('.sc')), subs=[].slice.call(tx.querySelectorAll('.sub[data-a]'));
+var timeEl=document.getElementById('txTime'), fuse=document.getElementById('txFuse'), countEl=document.getElementById('txCount');
+var glyphBox=tx.querySelector('.tx-glyphs')||document.createElement('div'), pyr=tx.querySelector('.sc-pyr'), decode=tx.querySelector('.tx-decode');
+var audio=null, t0=0, raf=0, phase='idle', countTimer=0, lastFocus=null, reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+// símbolos genéricos (no son el cifrado real de la postal)
+var G=['M8 8H52V52H8','M8 8V52H52','M52 8V52H8','M8 8L30 52L52 8','M8 52L30 8L52 52','M8 8H52V52','M8 30H52M30 8V52','M8 8H52M8 52H52M8 8V52'];
+for(var i=0;i<14;i++){var d=G[(i*5+3)%G.length],dot=(i%2===0);glyphBox.insertAdjacentHTML('beforeend','<svg viewBox="0 0 60 60"><path d="'+d+'"/>'+(dot?'<circle cx="30" cy="30" r="5"/>':'')+'</svg>');}
+var glyphs=[].slice.call(glyphBox.children);
+function now(){return audio?audio.currentTime:(performance.now()-t0)/1000;}
+function fmt(s){s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+var CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&@';
+function scramble(t){var full=decode.dataset.text,k=Math.min(1,t/1.8),out='';for(var i=0;i<full.length;i++){var c=full[i];out+=(c===' '||i/full.length<k)?c:CH[(Math.random()*CH.length)|0];}decode.textContent=out;}
+function tick(){
+  var t=now();
+  scenes.forEach(function(s){var on=t>=+s.dataset.a&&t<+s.dataset.b;if(on!==s.classList.contains('on'))s.classList.toggle('on',on);});
+  subs.forEach(function(s){s.classList.toggle('on',t>=+s.dataset.a);});
+  glyphs.forEach(function(g,i){g.classList.toggle('on',t>=16.2+i*.26);});
+  pyr.classList.toggle('closed',t>=46.6);
+  if(t<2.2&&!reduce)scramble(t);else decode.textContent=decode.dataset.text;
+  timeEl.textContent=fmt(t); fuse.style.width=Math.max(0,100-t/END*100)+'%';
+  if(phase==='play'&&(t>=END||(audio&&audio.ended)))countdown();
+  if(phase!=='idle')raf=requestAnimationFrame(tick);
+}
+function countdown(){phase='count';var n=5;countEl.textContent=n;clearInterval(countTimer);
+  countTimer=setInterval(function(){n--;if(n>0){countEl.textContent=n;}else{clearInterval(countTimer);tx.classList.add('burn');setTimeout(close,1500);}},1000);}
+function close(){
+  if(phase==='idle')return; phase='idle'; cancelAnimationFrame(raf); clearInterval(countTimer);
+  if(audio){try{audio.pause();}catch(e){}} if('speechSynthesis' in window)speechSynthesis.cancel();
+  tx.classList.remove('on'); setTimeout(function(){tx.hidden=true;tx.classList.remove('burn');scenes.forEach(function(s){s.classList.remove('on');});document.documentElement.style.overflow='';},600);
+  if(lastFocus&&lastFocus.focus)lastFocus.focus();
+  document.dispatchEvent(new Event('tx:closed'));
+}
+window.Transmision={start:function(a){
+  lastFocus=document.activeElement; audio=a||null; t0=performance.now(); phase='play';
+  tx.classList.remove('burn'); tx.hidden=false; document.documentElement.style.overflow='hidden';
+  requestAnimationFrame(function(){tx.classList.add('on');document.getElementById('txSkip').focus();});
+  cancelAnimationFrame(raf); raf=requestAnimationFrame(tick);
+}, close:close, _seek:function(s){if(audio)audio.currentTime=s;else t0=performance.now()-s*1000;}};
+document.getElementById('txSkip').addEventListener('click',close);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&phase!=='idle')close();});
+var cta=document.getElementById('ctaTx'); if(cta)cta.addEventListener('click',function(){var b=document.querySelector('#briefing .audio button');if(b)b.click();else window.Transmision.start(null);});
+})();
+</script></body></html>
